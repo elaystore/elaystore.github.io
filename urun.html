@@ -14,7 +14,7 @@
     button{width:100%;padding:15px;border:0;border-radius:10px;background:#9a663f;color:#fff;font-size:18px;font-weight:700;cursor:pointer;margin-top:18px}
     @media(max-width:700px){.detay{grid-template-columns:1fr;margin:16px;padding:20px}.resim img{height:340px}h1{font-size:28px}}
   </style>
-  <link rel="stylesheet" href="tema.css?v=7">
+  <link rel="stylesheet" href="tema.css?v=8">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body>
@@ -34,6 +34,43 @@
       <button type="button" onclick="sepeteEkle()">🛒 Sepete Ekle</button>
     </section>
   </main>
+  <section class="yorumlar" aria-labelledby="yorumBaslik">
+    <div class="yorumlar-ust">
+      <div>
+        <h2 id="yorumBaslik">Müşteri Yorumları</h2>
+        <p id="yorumOzet" class="yorum-ozet">Henüz yorum yapılmamış.</p>
+      </div>
+      <div id="yorumOrtalama" class="yorum-ortalama" aria-label="Ortalama puan">—</div>
+    </div>
+
+    <div id="yorumGirisUyari" class="yorum-giris-uyari">
+      Yorum yazmak için <a id="yorumGirisLinki" href="uye.html">üye girişi yapın</a>.
+    </div>
+
+    <form id="yorumFormu" class="yorum-formu" hidden>
+      <fieldset>
+        <legend>Puanınız</legend>
+        <div class="yildiz-secimi" aria-label="Ürüne yıldız verin">
+          <input type="radio" name="puan" id="puan5" value="5" required><label for="puan5" title="5 yıldız">★</label>
+          <input type="radio" name="puan" id="puan4" value="4"><label for="puan4" title="4 yıldız">★</label>
+          <input type="radio" name="puan" id="puan3" value="3"><label for="puan3" title="3 yıldız">★</label>
+          <input type="radio" name="puan" id="puan2" value="2"><label for="puan2" title="2 yıldız">★</label>
+          <input type="radio" name="puan" id="puan1" value="1"><label for="puan1" title="1 yıldız">★</label>
+        </div>
+      </fieldset>
+      <label for="yorumMetni">Yorumunuz</label>
+      <textarea id="yorumMetni" maxlength="500" rows="4" placeholder="Ürün hakkındaki düşüncenizi yazın." required></textarea>
+      <div class="yorum-form-alt">
+        <small>En fazla 500 karakter</small>
+        <button type="submit" id="yorumGonder">Yorumu Gönder</button>
+      </div>
+      <p id="yorumMesaj" class="yorum-mesaj" role="status" aria-live="polite"></p>
+    </form>
+
+    <div id="yorumListesi" class="yorum-listesi" aria-live="polite">
+      <p class="yorum-yukleniyor">Yorumlar yükleniyor…</p>
+    </div>
+  </section>
   <script>
     const ortakOzellikler=['El işçiliğiyle hazırlanmıştır','Filografi çivi ve tel tekniği kullanılmıştır','Sipariş ve ölçü bilgisi için iletişime geçebilirsiniz'];
     const tabloHazirlanma='Hazırlanma süresi; seçilen tablo modeli, ölçü, renk ve işçilik yoğunluğuna göre değişmektedir. Tahmini teslim süresi sipariş öncesinde WhatsApp üzerinden bildirilir.';
@@ -60,5 +97,6 @@
     p.oz.forEach(x=>{const li=document.createElement('li');li.textContent=x;document.getElementById('ozellik').appendChild(li)});
     function sepeteEkle(){let s=[];try{s=JSON.parse(localStorage.getItem('sepet')||'[]');if(!Array.isArray(s))s=[]}catch(e){s=[]}s.push({ad:p.ad,fiyat:p.fiyat,resim:p.resim});localStorage.setItem('sepet',JSON.stringify(s));alert(p.ad+' sepete eklendi! 🛒')}
   </script>
+  <script type="module" src="yorumlar.js?v=1"></script>
 </body>
 </html>

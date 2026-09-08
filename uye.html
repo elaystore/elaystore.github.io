@@ -575,13 +575,18 @@
     };
 
 
+    const donusAdresi = new URLSearchParams(window.location.search).get("donus");
+    const guvenliDonusAdresi = /^(?:urun|index|sepet|hakkimizda|iletisim|kisiye-ozel)\.html(?:\?[a-zA-Z0-9=&_-]+)?$/.test(donusAdresi || "")
+        ? donusAdresi
+        : "index.html";
+
     onAuthStateChanged(
         auth,
         function (user) {
 
             if (user) {
 
-                window.location.replace("index.html");
+                window.location.replace(guvenliDonusAdresi);
                 return;
 
                 document

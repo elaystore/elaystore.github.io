@@ -133,6 +133,244 @@ main {
     transform: rotate(180deg);
 }
 
+.yorumlar {
+    max-width: 1050px;
+    margin: 0 auto 44px;
+    padding: 30px 34px;
+    border: 1px solid rgba(216, 31, 42, .12);
+    border-radius: 18px;
+    background: #fffdfb;
+    box-shadow: 0 8px 28px rgba(52, 32, 34, .09);
+}
+
+.yorumlar-ust {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--elay-cizgi);
+}
+
+.yorumlar h2 {
+    margin: 0 0 7px;
+    color: var(--elay-siyah);
+    font-size: 28px;
+}
+
+.yorum-ozet {
+    margin: 0;
+    color: #6b6263;
+    font-size: 15px;
+}
+
+.yorum-ortalama {
+    flex: 0 0 auto;
+    min-width: 112px;
+    padding: 11px 15px;
+    border-radius: 12px;
+    background: #fff5f5;
+    color: #d99a00;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.yorum-giris-uyari {
+    margin-top: 22px;
+    padding: 15px 17px;
+    border-radius: 11px;
+    background: #f5f1ee;
+    color: #4f4748;
+    font-size: 16px;
+}
+
+.yorum-giris-uyari a {
+    color: var(--elay-kirmizi-koyu);
+    font-weight: 700;
+}
+
+.yorum-formu {
+    margin-top: 22px;
+    padding: 20px;
+    border: 1px solid var(--elay-cizgi);
+    border-radius: 14px;
+    background: #fffafa;
+}
+
+.yorum-formu fieldset {
+    margin: 0 0 15px;
+    padding: 0;
+    border: 0;
+}
+
+.yorum-formu legend,
+.yorum-formu > label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--elay-siyah);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.yildiz-secimi {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.yildiz-secimi input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.yildiz-secimi label {
+    padding: 1px 3px;
+    color: #c8c2bd;
+    font-size: 33px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.yildiz-secimi label:hover,
+.yildiz-secimi label:hover ~ label,
+.yildiz-secimi input:checked ~ label,
+.yildiz-secimi input:focus-visible + label {
+    color: #e7a900;
+}
+
+.yorum-formu textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 13px 14px;
+    resize: vertical;
+    border: 1px solid #d6ccca;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--elay-siyah);
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.yorum-formu textarea:focus {
+    outline: 2px solid rgba(216, 31, 42, .25);
+    border-color: var(--elay-kirmizi);
+}
+
+.yorum-form-alt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.yorum-form-alt small {
+    color: #766d6e;
+}
+
+.yorum-form-alt button {
+    width: auto;
+    min-width: 165px;
+    margin: 0;
+    padding: 12px 18px;
+    background: var(--elay-kirmizi);
+}
+
+.yorum-form-alt button:hover {
+    background: var(--elay-kirmizi-koyu);
+}
+
+.yorum-form-alt button:disabled {
+    cursor: wait;
+    opacity: .65;
+}
+
+.yorum-mesaj {
+    min-height: 20px;
+    margin: 12px 0 0;
+    color: var(--elay-kirmizi-koyu);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.yorum-listesi {
+    display: grid;
+    gap: 14px;
+    margin-top: 24px;
+}
+
+.yorum-karti {
+    padding: 18px;
+    border: 1px solid #eee3e1;
+    border-radius: 13px;
+    background: #fff;
+}
+
+.yorum-karti-ust {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.yorum-karti h3 {
+    margin: 0 0 5px;
+    color: var(--elay-siyah);
+    font-size: 17px;
+}
+
+.yorum-yildizlari {
+    color: #e7a900;
+    letter-spacing: 1px;
+}
+
+.yorum-tarih {
+    color: #817879;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.yorum-karti p {
+    margin: 13px 0 0;
+    color: #4a4243;
+    font-size: 16px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.yorum-yok,
+.yorum-yukleniyor,
+.yorum-hata {
+    margin: 0;
+    padding: 18px;
+    border-radius: 12px;
+    background: #f7f3f1;
+    color: #6c6263;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .yorumlar {
+        margin: 0 16px 30px;
+        padding: 22px 20px;
+    }
+
+    .yorumlar-ust,
+    .yorum-karti-ust,
+    .yorum-form-alt {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .yorum-form-alt button {
+        width: 100%;
+    }
+}
+
 .ozel-siparis {
     margin: 42px 0 10px;
     padding: 38px 42px;
