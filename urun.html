@@ -14,7 +14,7 @@
     button{width:100%;padding:15px;border:0;border-radius:10px;background:#9a663f;color:#fff;font-size:18px;font-weight:700;cursor:pointer;margin-top:18px}
     @media(max-width:700px){.detay{grid-template-columns:1fr;margin:16px;padding:20px}.resim img{height:340px}h1{font-size:28px}}
   </style>
-  <link rel="stylesheet" href="tema.css?v=8">
+  <link rel="stylesheet" href="tema.css?v=9">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body>
@@ -97,6 +97,6 @@
     p.oz.forEach(x=>{const li=document.createElement('li');li.textContent=x;document.getElementById('ozellik').appendChild(li)});
     function sepeteEkle(){let s=[];try{s=JSON.parse(localStorage.getItem('sepet')||'[]');if(!Array.isArray(s))s=[]}catch(e){s=[]}s.push({ad:p.ad,fiyat:p.fiyat,resim:p.resim});localStorage.setItem('sepet',JSON.stringify(s));alert(p.ad+' sepete eklendi! 🛒')}
   </script>
-  <script type="module" src="yorumlar.js?v=1"></script>
+  <script type="module" src="yorumlar.js?v=2"></script>
 </body>
 </html>
