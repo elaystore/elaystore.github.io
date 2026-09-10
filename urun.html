@@ -185,15 +185,29 @@
     aciklamaSekmesi.addEventListener('click',()=>sekmeAc('aciklama'));
     yorumSekmesi.addEventListener('click',()=>sekmeAc('yorum'));
 
-    const benzerSirasi=['tablo01','tablo04','tablo10','tablo02','tablo03','tablo05','tablo06','tablo07','tablo08','tablo09','mouse'];
-    const benzerler=benzerSirasi.filter(urunId=>urunId!==id).slice(0,3);
+    function karistir(liste){
+      const sonuc=[...liste];
+      for(let i=sonuc.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [sonuc[i],sonuc[j]]=[sonuc[j],sonuc[i]];
+      }
+      return sonuc;
+    }
+    const benzerHavuzu=Object.keys(urunler).filter(urunId=>urunId.startsWith('tablo')&&urunId!==id);
+    const hafizaAnahtari='elay_benzer_'+id;
+    let oncekiBenzerler=[];
+    try{oncekiBenzerler=JSON.parse(sessionStorage.getItem(hafizaAnahtari)||'[]')}catch(e){oncekiBenzerler=[]}
+    const yeniAdaylar=karistir(benzerHavuzu.filter(urunId=>!oncekiBenzerler.includes(urunId)));
+    const eskiAdaylar=karistir(benzerHavuzu.filter(urunId=>oncekiBenzerler.includes(urunId)));
+    const benzerler=[...yeniAdaylar,...eskiAdaylar].slice(0,3);
+    try{sessionStorage.setItem(hafizaAnahtari,JSON.stringify(benzerler))}catch(e){}
     if(!id.startsWith('tablo'))document.getElementById('benzerBaslik').textContent='Diğer Ürünler';
     const benzerListe=document.getElementById('benzerListe');
     benzerler.forEach(urunId=>{
       const urun=urunler[urunId];
       const baglanti=document.createElement('a');
       baglanti.className='benzer-kart';
-      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=2';
+      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=3';
       const gorsel=document.createElement('img');
       gorsel.src=urun.resim;
       gorsel.alt=urun.ad;
