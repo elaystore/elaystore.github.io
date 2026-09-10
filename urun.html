@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=13">
+  <link rel="stylesheet" href="tema.css?v=14">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body>
@@ -193,7 +193,7 @@
       const urun=urunler[urunId];
       const baglanti=document.createElement('a');
       baglanti.className='benzer-kart';
-      baglanti.href='urun.html?urun='+encodeURIComponent(urunId);
+      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=2';
       const gorsel=document.createElement('img');
       gorsel.src=urun.resim;
       gorsel.alt=urun.ad;

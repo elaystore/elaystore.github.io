@@ -387,7 +387,7 @@ try {
     sepet = [];
 }
 function urunDetay(id) {
-    location.href='urun.html?urun='+id
+    location.href='urun.html?urun='+encodeURIComponent(id)+'&v=2'
 }
 function sepeteEkle(e,ad,fiyat,resim) {
     e.stopPropagation();
