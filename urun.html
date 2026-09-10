@@ -4,40 +4,63 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
-  <style>
-    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f5f3f1;color:#222}
-    header{background:#9a663f;padding:18px 6%} header a{color:#fff;text-decoration:none;font-weight:700}
-    .detay{max-width:1050px;margin:35px auto;background:#fff;border-radius:18px;padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:42px;box-shadow:0 6px 24px #00000012}
-    .resim img{width:100%;height:500px;object-fit:contain;background:#faf8f5;border-radius:14px}
-    h1{font-size:34px;margin-top:8px}.puan{color:#e7a900;font-size:19px}.eski{text-decoration:line-through;color:#999;margin-top:14px}.fiyat{font-size:34px;font-weight:700;margin:5px 0}.stok{color:#159447;font-size:18px;margin:14px 0}
-    .ozellikler{border-top:1px solid #ddd;margin-top:24px;padding-top:12px}.ozellikler li{margin:12px 0}
-    button{width:100%;padding:15px;border:0;border-radius:10px;background:#9a663f;color:#fff;font-size:18px;font-weight:700;cursor:pointer;margin-top:18px}
-    @media(max-width:700px){.detay{grid-template-columns:1fr;margin:16px;padding:20px}.resim img{height:340px}h1{font-size:28px}}
-  </style>
-  <link rel="stylesheet" href="tema.css?v=12">
+  <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
+  <link rel="stylesheet" href="tema.css?v=13">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body>
   <header>
-    <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa"><img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu"></a>
+    <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa">
+      <img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu">
+    </a>
     <nav>
-      <a href="index.html">← Ürünlere Dön</a>
+      <a href="index.html">Ürünler</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="iletisim.html">İletişim</a>
       <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+      <a id="uyeBaglanti" href="uye.html">👤 Üye Ol / Giriş Yap</a>
+      <button id="cikisBtn" type="button" hidden>Çıkış Yap</button>
+      <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
     </nav>
   </header>
-  <main class="detay">
-    <div class="resim"><img id="resim" alt="Ürün fotoğrafı"></div>
-    <section>
-      <h1 id="ad"></h1><div class="puan" id="puan"></div><div class="eski" id="eski"></div>
-      <div class="fiyat" id="fiyat"></div><div class="stok" id="stok"></div>
-      <div class="ozellikler"><h2>Ürün Özellikleri</h2><ul id="ozellik"></ul></div>
-      <button type="button" onclick="sepeteEkle()">🛒 Sepete Ekle</button>
+
+  <main class="urun-detay-sayfasi">
+    <nav class="urun-iz" aria-label="Sayfa yolu">
+      <a href="index.html">Ana Sayfa</a><span aria-hidden="true">›</span>
+      <a href="index.html#urunler">Ürünler</a><span aria-hidden="true">›</span>
+      <strong id="izAd">Ürün Detayı</strong>
+    </nav>
+
+    <section class="detay yeni-detay" aria-labelledby="ad">
+      <div class="resim"><img id="resim" alt="Ürün fotoğrafı"></div>
+      <div class="detay-bilgi">
+        <div class="detay-etiket" id="kategoriEtiket">EL EMEĞİ</div>
+        <h1 id="ad"></h1>
+        <div class="puan" id="puan">☆ Henüz değerlendirme yok</div>
+        <div class="eski" id="eski"></div>
+        <div class="fiyat" id="fiyat"></div>
+        <div class="stok" id="stok">● Stokta Var</div>
+        <div class="detay-aksiyonlar">
+          <button class="detay-sepet" type="button" onclick="sepeteEkle()">🛒 Sepete Ekle</button>
+          <a class="detay-whatsapp" id="whatsappSiparis" href="#" target="_blank" rel="noopener noreferrer">WhatsApp ile Sipariş</a>
+        </div>
+
+        <div class="detay-sekmeler" role="tablist" aria-label="Ürün bilgileri">
+          <button id="aciklamaSekmesi" class="aktif" type="button" role="tab" aria-selected="true" aria-controls="aciklamaPaneli">Ürün Açıklaması</button>
+          <button id="yorumSekmesi" type="button" role="tab" aria-selected="false" aria-controls="yorumPaneli">Değerlendirmeler</button>
+        </div>
+
+        <section id="aciklamaPaneli" class="detay-panel" role="tabpanel" aria-labelledby="aciklamaSekmesi">
+          <p>El emeğiyle hazırlanan filografi çalışması.</p>
+          <ul id="ozellik"></ul>
+        </section>
+      </div>
     </section>
-  </main>
-  <section class="yorumlar" aria-labelledby="yorumBaslik">
+
+    <section id="yorumPaneli" class="yorumlar urun-yorumlari" role="tabpanel" aria-labelledby="yorumSekmesi" hidden>
     <div class="yorumlar-ust">
       <div>
-        <h2 id="yorumBaslik">Müşteri Yorumları</h2>
+        <h2 id="yorumBaslik">Değerlendirmeler</h2>
         <p id="yorumOzet" class="yorum-ozet">Henüz yorum yapılmamış.</p>
       </div>
       <div id="yorumOrtalama" class="yorum-ortalama" aria-label="Ortalama puan">—</div>
@@ -70,12 +93,32 @@
     <div id="yorumListesi" class="yorum-listesi" aria-live="polite">
       <p class="yorum-yukleniyor">Yorumlar yükleniyor…</p>
     </div>
-  </section>
+    </section>
+
+    <section class="benzer-urunler" aria-labelledby="benzerBaslik">
+      <div class="benzer-baslik">
+        <span aria-hidden="true"></span>
+        <h2 id="benzerBaslik">Benzer Tablolar</h2>
+        <span aria-hidden="true"></span>
+      </div>
+      <div id="benzerListe" class="benzer-liste"></div>
+    </section>
+  </main>
+
+  <footer class="ana-footer">
+    <strong>ELAY FİLOGRAFİ</strong>
+    <div>
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="iletisim.html">İletişim</a>
+      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+    </div>
+  </footer>
+
   <script>
     const ortakOzellikler=['El işçiliğiyle hazırlanmıştır','Filografi çivi ve tel tekniği kullanılmıştır','Sipariş ve ölçü bilgisi için iletişime geçebilirsiniz'];
     const tabloHazirlanma='Hazırlanma süresi; seçilen tablo modeli, ölçü, renk ve işçilik yoğunluğuna göre değişmektedir. Tahmini teslim süresi sipariş öncesinde WhatsApp üzerinden bildirilir.';
     const urunler={
-      mouse:{ad:'El İşi Bileklik',fiyat:350,resim:'resim.jpg',puan:'⭐⭐⭐⭐⭐ 4.8 / 5',stok:'🟢 Stokta Var',oz:['Bileğe göre hazırlanabilir','Farklı renk seçenekleri vardır']},
+      mouse:{ad:'El İşi Bileklik',fiyat:350,resim:'resim.jpg',oz:['Bileğe göre hazırlanabilir','Farklı renk seçenekleri vardır']},
       tablo01:{ad:'Zarif Hat Filografi Tablosu',fiyat:2500,resim:'tablo-01.png'},
       tablo02:{ad:'Turkuaz Hat Filografi Tablosu',fiyat:8500,eski:'10.000 TL',resim:'tablo-02.png'},
       tablo03:{ad:'Lale Motifli Filografi Tablosu',fiyat:2200,resim:'tablo-03.png'},
@@ -89,14 +132,103 @@
     };
     const id=new URLSearchParams(location.search).get('urun')||'mouse';
     const p=urunler[id]||urunler.mouse;
-    if(!p.puan)p.puan='⭐⭐⭐⭐⭐ 5.0 / 5'; if(!p.stok)p.stok='🟢 Stokta Var'; if(!p.oz)p.oz=[...ortakOzellikler];
+    if(!p.puan)p.puan='☆ Henüz değerlendirme yok';
+    if(!p.stok)p.stok='● Stokta Var';
+    if(!p.oz)p.oz=[...ortakOzellikler];
     if(id.startsWith('tablo'))p.oz.push(tabloHazirlanma);
-    document.getElementById('ad').textContent=p.ad; document.getElementById('fiyat').textContent=p.fiyat.toLocaleString('tr-TR')+' TL';
-    document.getElementById('eski').textContent=p.eski||''; document.getElementById('puan').textContent=p.puan; document.getElementById('stok').textContent=p.stok;
-    document.getElementById('resim').src=p.resim; document.getElementById('resim').alt=p.ad; if(id==='tablo03')document.getElementById('resim').classList.add('ters-resim');
+    const para=(deger)=>deger.toLocaleString('tr-TR')+' TL';
+    const resim=document.getElementById('resim');
+    document.getElementById('ad').textContent=p.ad;
+    document.getElementById('izAd').textContent=p.ad;
+    document.getElementById('kategoriEtiket').textContent=id.startsWith('tablo')?'FİLOGRAFİ TABLO':'EL İŞİ BİLEKLİK';
+    document.getElementById('fiyat').textContent=para(p.fiyat);
+    document.getElementById('eski').textContent=p.eski||'';
+    document.getElementById('puan').textContent=p.puan;
+    document.getElementById('stok').textContent=p.stok;
+    resim.src=p.resim;
+    resim.alt=p.ad;
+    if(id==='tablo03')resim.classList.add('ters-resim');
     p.oz.forEach(x=>{const li=document.createElement('li');li.textContent=x;document.getElementById('ozellik').appendChild(li)});
-    function sepeteEkle(){let s=[];try{s=JSON.parse(localStorage.getItem('sepet')||'[]');if(!Array.isArray(s))s=[]}catch(e){s=[]}s.push({ad:p.ad,fiyat:p.fiyat,resim:p.resim});localStorage.setItem('sepet',JSON.stringify(s));alert(p.ad+' sepete eklendi! 🛒')}
+
+    document.title=p.ad+' | Elay Store';
+    document.querySelector('meta[name="description"]').content=p.ad+' ürün bilgileri, müşteri değerlendirmeleri ve benzer Elay Store ürünleri.';
+    document.getElementById('whatsappSiparis').href='https://wa.me/905072431779?text='+encodeURIComponent('Merhaba, '+p.ad+' hakkında bilgi almak ve sipariş vermek istiyorum.');
+
+    function sepetSayisiniGuncelle(){
+      let s=[];
+      try{s=JSON.parse(localStorage.getItem('sepet')||'[]');if(!Array.isArray(s))s=[]}catch(e){s=[]}
+      document.getElementById('sepetSayi').textContent=s.length;
+      return s;
+    }
+    function sepeteEkle(){
+      const s=sepetSayisiniGuncelle();
+      s.push({id,ad:p.ad,fiyat:p.fiyat,resim:p.resim});
+      localStorage.setItem('sepet',JSON.stringify(s));
+      sepetSayisiniGuncelle();
+      alert(p.ad+' sepete eklendi! 🛒');
+    }
+    sepetSayisiniGuncelle();
+
+    const aciklamaSekmesi=document.getElementById('aciklamaSekmesi');
+    const yorumSekmesi=document.getElementById('yorumSekmesi');
+    const aciklamaPaneli=document.getElementById('aciklamaPaneli');
+    const yorumPaneli=document.getElementById('yorumPaneli');
+    function sekmeAc(hedef){
+      const yorumAcik=hedef==='yorum';
+      aciklamaPaneli.hidden=yorumAcik;
+      yorumPaneli.hidden=!yorumAcik;
+      aciklamaSekmesi.classList.toggle('aktif',!yorumAcik);
+      yorumSekmesi.classList.toggle('aktif',yorumAcik);
+      aciklamaSekmesi.setAttribute('aria-selected',String(!yorumAcik));
+      yorumSekmesi.setAttribute('aria-selected',String(yorumAcik));
+    }
+    aciklamaSekmesi.addEventListener('click',()=>sekmeAc('aciklama'));
+    yorumSekmesi.addEventListener('click',()=>sekmeAc('yorum'));
+
+    const benzerSirasi=['tablo01','tablo04','tablo10','tablo02','tablo03','tablo05','tablo06','tablo07','tablo08','tablo09','mouse'];
+    const benzerler=benzerSirasi.filter(urunId=>urunId!==id).slice(0,3);
+    if(!id.startsWith('tablo'))document.getElementById('benzerBaslik').textContent='Diğer Ürünler';
+    const benzerListe=document.getElementById('benzerListe');
+    benzerler.forEach(urunId=>{
+      const urun=urunler[urunId];
+      const baglanti=document.createElement('a');
+      baglanti.className='benzer-kart';
+      baglanti.href='urun.html?urun='+encodeURIComponent(urunId);
+      const gorsel=document.createElement('img');
+      gorsel.src=urun.resim;
+      gorsel.alt=urun.ad;
+      if(urunId==='tablo03')gorsel.classList.add('ters-resim');
+      const ad=document.createElement('h3');
+      ad.textContent=urun.ad;
+      const fiyat=document.createElement('strong');
+      fiyat.textContent=para(urun.fiyat);
+      const incele=document.createElement('span');
+      incele.textContent='Ürünü İncele';
+      baglanti.append(gorsel,ad,fiyat,incele);
+      benzerListe.appendChild(baglanti);
+    });
   </script>
   <script type="module" src="yorumlar.js?v=2"></script>
+  <script type="module">
+    import { initializeApp, getApp, getApps } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js';
+    const firebaseConfig={apiKey:'AIzaSyDKpEI_TzDxA38N30BEjMScnl0GnYabl3c',authDomain:'elaystore-c4d53.firebaseapp.com',projectId:'elaystore-c4d53',storageBucket:'elaystore-c4d53.firebasestorage.app',messagingSenderId:'585341292448',appId:'1:585341292448:web:51ace255ab2fcf89b21ec5'};
+    const app=getApps().length?getApp():initializeApp(firebaseConfig);
+    const auth=getAuth(app);
+    const uyeBaglanti=document.getElementById('uyeBaglanti');
+    const cikisBtn=document.getElementById('cikisBtn');
+    onAuthStateChanged(auth,kullanici=>{
+      if(kullanici){
+        uyeBaglanti.textContent='👤 '+(kullanici.displayName||kullanici.email||'Hesabım');
+        uyeBaglanti.href='uye.html';
+        cikisBtn.hidden=false;
+      }else{
+        uyeBaglanti.textContent='👤 Üye Ol / Giriş Yap';
+        uyeBaglanti.href='uye.html';
+        cikisBtn.hidden=true;
+      }
+    });
+    cikisBtn.addEventListener('click',async()=>{await signOut(auth);location.href='index.html'});
+  </script>
 </body>
 </html>
