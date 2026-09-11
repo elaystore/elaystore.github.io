@@ -1348,6 +1348,22 @@ nav,
 }
 
 /* Ürün detay sayfası */
+.urun-detay-body > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.urun-detay-body > header nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.urun-detay-body > header nav button {
+    color: #fff;
+    background: transparent;
+}
+
 .urun-detay-sayfasi {
     width: min(1240px, calc(100% - 40px));
     margin: 0 auto;
@@ -1679,6 +1695,11 @@ nav,
 }
 
 @media (max-width: 560px) {
+    .urun-detay-body > header {
+        display: flex;
+        align-items: center;
+    }
+
     .urun-detay-sayfasi {
         width: calc(100% - 24px);
         padding-top: 18px;

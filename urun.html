@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=14">
+  <link rel="stylesheet" href="tema.css?v=15">
   <script src="analitik.js?v=1" defer></script>
 </head>
-<body>
+<body class="urun-detay-body">
   <header>
     <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa">
       <img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu">
@@ -194,7 +194,7 @@
       return sonuc;
     }
     const benzerHavuzu=Object.keys(urunler).filter(urunId=>urunId.startsWith('tablo')&&urunId!==id);
-    const hafizaAnahtari='elay_benzer_'+id;
+    const hafizaAnahtari='elay_son_benzer_tablolar';
     let oncekiBenzerler=[];
     try{oncekiBenzerler=JSON.parse(sessionStorage.getItem(hafizaAnahtari)||'[]')}catch(e){oncekiBenzerler=[]}
     const yeniAdaylar=karistir(benzerHavuzu.filter(urunId=>!oncekiBenzerler.includes(urunId)));
