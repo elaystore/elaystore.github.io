@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=17">
+  <link rel="stylesheet" href="tema.css?v=18">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
@@ -126,8 +126,13 @@
   </footer>
 
   <script>
-    const ortakOzellikler=['El işçiliğiyle hazırlanmıştır','Filografi çivi ve tel tekniği kullanılmıştır','Sipariş ve ölçü bilgisi için iletişime geçebilirsiniz'];
-    const tabloHazirlanma='Hazırlanma süresi; seçilen tablo modeli, ölçü, renk ve işçilik yoğunluğuna göre değişmektedir. Tahmini teslim süresi sipariş öncesinde WhatsApp üzerinden bildirilir.';
+    const ortakOzellikler=[
+      'El işçiliği: Özgün filografi tekniğiyle özenle hazırlanır.',
+      'Kullanılan malzeme: Tasarıma göre top başlı veya düz çivi ile uygun kalınlık ve renkte teller kullanılır.',
+      'Zemin ve renk: Zemin kaplaması ile tel renkleri seçilen modele göre değişiklik gösterir.',
+      'Kişiye özel üretim: Renk, ölçü ve bazı tasarım ayrıntıları sipariş öncesinde görüşülebilir.'
+    ];
+    const tabloHazirlanma='Hazırlanma süresi: Tablonun ölçüsü, modeli ve işçilik yoğunluğuna göre belirlenir. Tahmini teslim süresi sipariş öncesinde WhatsApp üzerinden bildirilir.';
     const urunler={
       mouse:{ad:'El İşi Bileklik',fiyat:350,resim:'resim.jpg',oz:['Bileğe göre hazırlanabilir','Farklı renk seçenekleri vardır']},
       tablo01:{ad:'Zarif Hat Filografi Tablosu',fiyat:2500,resim:'tablo-01.png'},
@@ -169,7 +174,18 @@
     document.getElementById('eski').textContent=p.eski||'';
     document.getElementById('puan').textContent=p.puan;
     document.getElementById('stok').textContent=p.stok;
-    p.oz.forEach(x=>{const li=document.createElement('li');li.textContent=x;document.getElementById('ozellik').appendChild(li)});
+    p.oz.forEach(x=>{
+      const li=document.createElement('li');
+      const ayir=x.indexOf(':');
+      if(ayir>-1){
+        const baslik=document.createElement('strong');
+        baslik.textContent=x.slice(0,ayir+1)+' ';
+        li.append(baslik,document.createTextNode(x.slice(ayir+1).trim()));
+      }else{
+        li.textContent=x;
+      }
+      document.getElementById('ozellik').appendChild(li);
+    });
 
     const galeri=galeriDosyalari[id]||[p.resim];
     const galeriEtiketleri=['Ürün görünümü','İşçilik detayı','Dekorasyon görünümü'];

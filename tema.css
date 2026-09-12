@@ -1693,6 +1693,11 @@ body.galeri-acik {
     padding-left: 20px;
 }
 
+.detay-panel li strong {
+    color: #292521;
+    font-weight: 700;
+}
+
 .urun-yorumlari {
     max-width: none;
     margin: 34px 0 0;
