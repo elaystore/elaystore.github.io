@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=15">
+  <link rel="stylesheet" href="tema.css?v=16">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
@@ -32,7 +32,13 @@
     </nav>
 
     <section class="detay yeni-detay" aria-labelledby="ad">
-      <div class="resim"><img id="resim" alt="Ürün fotoğrafı"></div>
+      <div class="resim urun-galeri">
+        <button id="galeriAna" class="galeri-ana" type="button" aria-label="Ürün fotoğrafını büyüt">
+          <img id="resim" alt="Ürün fotoğrafı">
+          <span aria-hidden="true">⌕ Büyüt</span>
+        </button>
+        <div id="galeriKucuk" class="galeri-kucuk" aria-label="Ürün fotoğrafları"></div>
+      </div>
       <div class="detay-bilgi">
         <div class="detay-etiket" id="kategoriEtiket">EL EMEĞİ</div>
         <h1 id="ad"></h1>
@@ -105,6 +111,11 @@
     </section>
   </main>
 
+  <div id="galeriModal" class="galeri-modal" hidden role="dialog" aria-modal="true" aria-label="Büyütülmüş ürün fotoğrafı">
+    <button id="galeriKapat" class="galeri-kapat" type="button" aria-label="Büyütülmüş fotoğrafı kapat">×</button>
+    <img id="galeriBuyuk" alt="">
+  </div>
+
   <footer class="ana-footer">
     <strong>ELAY FİLOGRAFİ</strong>
     <div>
@@ -130,6 +141,19 @@
       tablo09:{ad:'Vav Filografi Tablosu',fiyat:3500,resim:'tablo-09.png'},
       tablo10:{ad:'Gümüş Zemin Hat Filografi Tablosu',fiyat:8500,resim:'tablo-10.png'}
     };
+    const galeriDosyalari={
+      mouse:['resim.jpg','bileklik-detay.webp','bileklik-ortam.webp'],
+      tablo01:['tablo-01.png','tablo-01-detay.webp','tablo-01-ortam.webp'],
+      tablo02:['tablo-02.png','tablo-02-detay.webp','tablo-02-ortam.webp'],
+      tablo03:['tablo-03.png','tablo-03-detay.webp','tablo-03-ortam.webp'],
+      tablo04:['tablo-04.png','tablo-04-detay.webp','tablo-04-ortam.webp'],
+      tablo05:['tablo-05.png','tablo-05-detay.webp','tablo-05-ortam.webp'],
+      tablo06:['tablo-06.png','tablo-06-detay.webp','tablo-06-ortam.webp'],
+      tablo07:['tablo-07.png','tablo-07-detay.webp','tablo-07-ortam.webp'],
+      tablo08:['tablo-08.png','tablo-08-detay.webp','tablo-08-ortam.webp'],
+      tablo09:['tablo-09.png','tablo-09-detay.webp','tablo-09-ortam.webp'],
+      tablo10:['tablo-10.png','tablo-10-detay.webp','tablo-10-ortam.webp']
+    };
     const id=new URLSearchParams(location.search).get('urun')||'mouse';
     const p=urunler[id]||urunler.mouse;
     if(!p.puan)p.puan='☆ Henüz değerlendirme yok';
@@ -145,10 +169,60 @@
     document.getElementById('eski').textContent=p.eski||'';
     document.getElementById('puan').textContent=p.puan;
     document.getElementById('stok').textContent=p.stok;
-    resim.src=p.resim;
-    resim.alt=p.ad;
-    if(id==='tablo03')resim.classList.add('ters-resim');
     p.oz.forEach(x=>{const li=document.createElement('li');li.textContent=x;document.getElementById('ozellik').appendChild(li)});
+
+    const galeri=galeriDosyalari[id]||[p.resim];
+    const galeriEtiketleri=['Ürün görünümü','İşçilik detayı','Dekorasyon görünümü'];
+    const galeriKucuk=document.getElementById('galeriKucuk');
+    const galeriAna=document.getElementById('galeriAna');
+    const galeriModal=document.getElementById('galeriModal');
+    const galeriBuyuk=document.getElementById('galeriBuyuk');
+    const galeriKapat=document.getElementById('galeriKapat');
+    let aktifFotograf=0;
+
+    function fotografGoster(sira){
+      aktifFotograf=sira;
+      resim.src=galeri[sira];
+      resim.alt=p.ad+' - '+galeriEtiketleri[sira];
+      resim.classList.toggle('ters-resim',id==='tablo03'&&sira===0);
+      galeriKucuk.querySelectorAll('button').forEach((dugme,i)=>{
+        dugme.classList.toggle('aktif',i===sira);
+        dugme.setAttribute('aria-current',i===sira?'true':'false');
+      });
+    }
+
+    galeri.forEach((dosya,sira)=>{
+      const dugme=document.createElement('button');
+      dugme.type='button';
+      dugme.setAttribute('aria-label',galeriEtiketleri[sira]+' fotoğrafını göster');
+      const kucuk=document.createElement('img');
+      kucuk.src=dosya;
+      kucuk.alt='';
+      kucuk.loading=sira===0?'eager':'lazy';
+      if(id==='tablo03'&&sira===0)kucuk.classList.add('ters-resim');
+      dugme.appendChild(kucuk);
+      dugme.addEventListener('click',()=>fotografGoster(sira));
+      galeriKucuk.appendChild(dugme);
+    });
+    fotografGoster(0);
+
+    function galeriAc(){
+      galeriBuyuk.src=galeri[aktifFotograf];
+      galeriBuyuk.alt=resim.alt;
+      galeriBuyuk.classList.toggle('ters-resim',id==='tablo03'&&aktifFotograf===0);
+      galeriModal.hidden=false;
+      document.body.classList.add('galeri-acik');
+      galeriKapat.focus();
+    }
+    function galeriKapatIslemi(){
+      galeriModal.hidden=true;
+      document.body.classList.remove('galeri-acik');
+      galeriAna.focus();
+    }
+    galeriAna.addEventListener('click',galeriAc);
+    galeriKapat.addEventListener('click',galeriKapatIslemi);
+    galeriModal.addEventListener('click',olay=>{if(olay.target===galeriModal)galeriKapatIslemi()});
+    document.addEventListener('keydown',olay=>{if(olay.key==='Escape'&&!galeriModal.hidden)galeriKapatIslemi()});
 
     document.title=p.ad+' | Elay Store';
     document.querySelector('meta[name="description"]').content=p.ad+' ürün bilgileri, müşteri değerlendirmeleri ve benzer Elay Store ürünleri.';
