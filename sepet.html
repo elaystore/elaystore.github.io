@@ -305,7 +305,7 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="tema.css?v=7">
+    <link rel="stylesheet" href="tema.css?v=12">
     <script src="analitik.js?v=1" defer></script>
 </head>
 
@@ -344,8 +344,8 @@
         <section id="siparisKutusu" class="siparis-kutusu">
             <h3>Siparişi Tamamla</h3>
             <p class="siparis-aciklama">
-                Bilgilerinizi doldurun, ödeme şeklini ve siparişin gönderileceği
-                WhatsApp numarasını seçin. Sipariş özetiniz hazır mesaj olarak açılacaktır.
+                Bilgilerinizi doldurun ve siparişin gönderileceği WhatsApp
+                numarasını seçin. Sipariş özetiniz hazır mesaj olarak açılacaktır.
             </p>
 
             <form id="siparisFormu">
@@ -368,14 +368,8 @@
                     <fieldset class="form-alani">
                         <legend class="secim-baslik">Ödeme Şekli</legend>
                         <div class="secim-grubu">
-                            <label class="secim">
-                                <input type="radio" name="odeme" value="Havale / EFT" checked>
-                                <span>Havale / EFT</span>
-                            </label>
-                            <label class="secim">
-                                <input type="radio" name="odeme" value="Banka veya kredi kartı">
-                                <span>Banka veya kredi kartı</span>
-                            </label>
+                            <input type="hidden" name="odeme" value="Havale / EFT">
+                            <div class="secim"><span>Havale / EFT</span></div>
                         </div>
                     </fieldset>
 
@@ -401,8 +395,7 @@
                 </div>
 
                 <div class="bilgi-notu">
-                    Kartla ödeme seçildiğinde kart bilgisi bu sayfaya yazılmaz.
-                    Siparişiniz alındıktan sonra güvenli ödeme bağlantısı WhatsApp üzerinden gönderilir.
+                    Havale / EFT bilgileri siparişiniz alındıktan sonra WhatsApp üzerinden gönderilir.
                 </div>
 
                 <button class="whatsapp-btn" type="submit">WhatsApp'tan Sipariş Ver</button>
@@ -547,11 +540,7 @@
                 "Ödeme Şekli: " + formVerisi.get("odeme")
             ];
 
-            if (formVerisi.get("odeme") === "Banka veya kredi kartı") {
-                satirlar.push("Kartla ödeme için güvenli ödeme bağlantısı rica ediyorum.");
-            } else {
-                satirlar.push("Havale / EFT bilgilerini rica ediyorum.");
-            }
+            satirlar.push("Havale / EFT bilgilerini rica ediyorum.");
 
             return satirlar.join("\n");
         }
