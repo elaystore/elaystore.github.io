@@ -1469,6 +1469,10 @@ nav,
     margin-top: 14px;
 }
 
+.galeri-kucuk.dortlu {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .galeri-kucuk button {
     display: block;
     width: 100%;

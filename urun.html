@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=18">
+  <link rel="stylesheet" href="tema.css?v=19">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
@@ -145,7 +145,11 @@
       tablo07:{ad:'Bereket Duası Filografi Tablosu',fiyat:9500,resim:'tablo-07.png'},
       tablo08:{ad:'Yuvarlak Ahşap Filografi Tablosu',fiyat:11500,resim:'tablo-08.png'},
       tablo09:{ad:'Vav Filografi Tablosu',fiyat:3500,resim:'tablo-09.png'},
-      tablo10:{ad:'Gümüş Zemin Hat Filografi Tablosu',fiyat:8500,resim:'tablo-10.png'}
+      tablo10:{ad:'Gümüş Zemin Hat Filografi Tablosu',fiyat:8500,resim:'tablo-10.png'},
+      tablo11:{ad:'İstanbul Silüeti Filografi Tablosu',fiyat:8500,resim:'istanbul-silueti-01.webp'},
+      tablo12:{ad:'Galata Kulesi Filografi Tablosu',fiyat:7500,resim:'galata-lale-01.webp'},
+      tablo13:{ad:'Renkli Besmele Filografi Tablosu',fiyat:7600,resim:'besmele-renkli-01.webp'},
+      tablo14:{ad:'Türk Bayrağı Filografi Tablosu',fiyat:6500,resim:'turk-bayragi-01.webp'}
     };
     const galeriDosyalari={
       mouse:['resim.jpg','bileklik-detay.webp','bileklik-ortam.webp'],
@@ -158,7 +162,11 @@
       tablo07:['tablo-07.png','tablo-07-detay.webp','tablo-07-ortam.webp'],
       tablo08:['tablo-08.png','tablo-08-detay.webp','tablo-08-ortam.webp'],
       tablo09:['tablo-09.png','tablo-09-detay.webp','tablo-09-ortam.webp'],
-      tablo10:['tablo-10.png','tablo-10-detay.webp','tablo-10-ortam.webp']
+      tablo10:['tablo-10.png','tablo-10-detay.webp','tablo-10-ortam.webp'],
+      tablo11:['istanbul-silueti-01.webp','istanbul-silueti-02.webp','istanbul-silueti-03.webp','istanbul-silueti-04.webp'],
+      tablo12:['galata-lale-01.webp','galata-lale-02.webp','galata-lale-03.webp'],
+      tablo13:['besmele-renkli-01.webp'],
+      tablo14:['turk-bayragi-01.webp','turk-bayragi-02.webp','turk-bayragi-03.webp','turk-bayragi-04.webp']
     };
     const id=new URLSearchParams(location.search).get('urun')||'mouse';
     const p=urunler[id]||urunler.mouse;
@@ -189,13 +197,14 @@
     });
 
     const galeri=galeriDosyalari[id]||[p.resim];
-    const galeriEtiketleri=['Ürün görünümü','İşçilik detayı','Dekorasyon görünümü'];
+    const galeriEtiketleri=['Ürün görünümü','İkinci görünüm','Yakın görünüm','Açılı görünüm'];
     const galeriKucuk=document.getElementById('galeriKucuk');
     const galeriAna=document.getElementById('galeriAna');
     const galeriModal=document.getElementById('galeriModal');
     const galeriBuyuk=document.getElementById('galeriBuyuk');
     const galeriKapat=document.getElementById('galeriKapat');
     let aktifFotograf=0;
+    if(galeri.length===4)galeriKucuk.classList.add('dortlu');
 
     function fotografGoster(sira){
       aktifFotograf=sira;
