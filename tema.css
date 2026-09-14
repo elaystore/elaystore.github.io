@@ -60,6 +60,96 @@ header > a:not(.marka):hover {
     border-color: var(--elay-pembe) !important;
 }
 
+.profil-menu {
+    position: relative;
+    color: #fff;
+}
+
+.profil-menu[hidden] {
+    display: none !important;
+}
+
+.profil-menu summary {
+    padding: 8px 11px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 8px;
+    color: #fff;
+    background: rgba(255, 255, 255, .06);
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    list-style: none;
+}
+
+.profil-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.profil-menu[open] summary {
+    background: rgba(216, 31, 42, .88);
+}
+
+.profil-acilir {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 12000;
+    display: grid;
+    min-width: 230px;
+    padding: 9px;
+    border: 1px solid #eadfd8;
+    border-radius: 13px;
+    color: #292525;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(20, 16, 15, .24);
+}
+
+.profil-acilir::before {
+    position: absolute;
+    top: -6px;
+    right: 22px;
+    width: 11px;
+    height: 11px;
+    border-top: 1px solid #eadfd8;
+    border-left: 1px solid #eadfd8;
+    background: #fff;
+    content: "";
+    transform: rotate(45deg);
+}
+
+.profil-acilir strong {
+    overflow: hidden;
+    padding: 10px 11px 12px;
+    border-bottom: 1px solid #eee5df;
+    color: #6f6863;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+header .profil-acilir a,
+header .profil-acilir button {
+    display: block;
+    width: 100%;
+    margin: 2px 0 !important;
+    padding: 10px 11px !important;
+    border: 0 !important;
+    border-radius: 8px;
+    color: #292525 !important;
+    background: transparent !important;
+    font: inherit;
+    font-weight: 650;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+header .profil-acilir a:hover,
+header .profil-acilir button:hover {
+    color: #a50e20 !important;
+    background: #f8eeeb !important;
+}
+
 .container,
 main {
     position: relative;
@@ -1177,6 +1267,10 @@ header nav button {
     transition: transform .18s ease, color .18s ease, background .18s ease;
 }
 
+.favori-btn[hidden] {
+    display: none !important;
+}
+
 .favori-btn:hover {
     transform: scale(1.07);
 }
@@ -1855,6 +1949,10 @@ body.galeri-acik {
 .yeni-detay .detay-aksiyonlar .detay-favori {
     color: #9f1020;
     background: #fff;
+}
+
+.yeni-detay .detay-aksiyonlar .detay-favori[hidden] {
+    display: none !important;
 }
 
 .yeni-detay .detay-aksiyonlar .detay-favori.aktif {
