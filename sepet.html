@@ -305,7 +305,7 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="tema.css?v=12">
+    <link rel="stylesheet" href="tema.css?v=23">
     <script src="analitik.js?v=1" defer></script>
 </head>
 
@@ -319,7 +319,16 @@
             <a href="index.html">Ürünler</a>
             <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
             <a id="uyeBaglanti" href="uye.html">👤 Üye Ol / Giriş Yap</a>
-            <button id="cikisBtn" type="button" hidden>Çıkış Yap</button>
+            <details class="profil-menu" id="profilMenu" hidden>
+                <summary>👤 Profilim</summary>
+                <div class="profil-acilir">
+                    <strong id="profilAd"></strong>
+                    <a href="hakkimizda.html">Hakkımızda</a>
+                    <a href="iletisim.html">İletişim</a>
+                    <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+                    <button id="cikisBtn" type="button">Çıkış Yap</button>
+                </div>
+            </details>
             <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
         </nav>
     </header>
@@ -592,23 +601,28 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const uyeBaglanti = document.getElementById("uyeBaglanti");
+        const profilMenu = document.getElementById("profilMenu");
+        const profilAd = document.getElementById("profilAd");
         const cikisBtn = document.getElementById("cikisBtn");
 
         onAuthStateChanged(auth, function (user) {
             if (user) {
                 const ad = user.displayName || user.email.split("@")[0];
-                uyeBaglanti.textContent = "👋 Hoş geldin, " + ad;
-                uyeBaglanti.removeAttribute("href");
-                cikisBtn.hidden = false;
+                uyeBaglanti.hidden = true;
+                profilAd.textContent = ad;
+                profilMenu.hidden = false;
             } else {
+                uyeBaglanti.hidden = false;
                 uyeBaglanti.textContent = "👤 Üye Ol / Giriş Yap";
                 uyeBaglanti.href = "uye.html";
-                cikisBtn.hidden = true;
+                profilMenu.hidden = true;
+                profilMenu.open = false;
             }
         });
 
         cikisBtn.addEventListener("click", async function () {
             await signOut(auth);
+            location.href = "index.html";
         });
     </script>
 </body>
