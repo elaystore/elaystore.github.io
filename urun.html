@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=21">
+  <link rel="stylesheet" href="tema.css?v=23">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
@@ -15,11 +15,18 @@
     </a>
     <nav>
       <a href="index.html">Ürünler</a>
-      <a href="hakkimizda.html">Hakkımızda</a>
-      <a href="iletisim.html">İletişim</a>
       <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
       <a id="uyeBaglanti" href="uye.html">👤 Üye Ol / Giriş Yap</a>
-      <button id="cikisBtn" type="button" hidden>Çıkış Yap</button>
+      <details class="profil-menu" id="profilMenu" hidden>
+        <summary>👤 Profilim</summary>
+        <div class="profil-acilir">
+          <strong id="profilAd"></strong>
+          <a href="hakkimizda.html">Hakkımızda</a>
+          <a href="iletisim.html">İletişim</a>
+          <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+          <button id="cikisBtn" type="button">Çıkış Yap</button>
+        </div>
+      </details>
       <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
     </nav>
   </header>
@@ -48,7 +55,7 @@
         <div class="stok" id="stok">● Stokta Var</div>
         <div class="detay-aksiyonlar">
           <button class="detay-sepet" type="button" onclick="sepeteEkle()">🛒 Sepete Ekle</button>
-          <button class="detay-favori" id="detayFavori" type="button" aria-pressed="false">♡ Favorilere Ekle</button>
+          <button class="detay-favori" id="detayFavori" type="button" hidden aria-pressed="false">♡ Favorilere Ekle</button>
           <a class="detay-whatsapp" id="whatsappSiparis" href="#" target="_blank" rel="noopener noreferrer">WhatsApp ile Sipariş</a>
         </div>
 
@@ -286,23 +293,33 @@
     }
     sepetSayisiniGuncelle();
 
+    let aktifKullaniciId=null;
     let favoriler=[];
-    try{favoriler=JSON.parse(localStorage.getItem('elay_favoriler')||'[]');if(!Array.isArray(favoriler))favoriler=[]}catch(e){favoriler=[]}
     const detayFavori=document.getElementById('detayFavori');
+    function favoriAnahtari(){return aktifKullaniciId?'elay_favoriler_'+aktifKullaniciId:null}
     function detayFavoriyiGuncelle(){
       const favoride=favoriler.includes(id);
       detayFavori.classList.toggle('aktif',favoride);
       detayFavori.setAttribute('aria-pressed',String(favoride));
       detayFavori.textContent=favoride?'♥ Favorilerden Çıkar':'♡ Favorilere Ekle';
     }
+    window.favorileriEtkinlestir=function(kullaniciId){
+      aktifKullaniciId=kullaniciId||null;
+      favoriler=[];
+      if(aktifKullaniciId){
+        try{favoriler=JSON.parse(localStorage.getItem(favoriAnahtari())||'[]');if(!Array.isArray(favoriler))favoriler=[]}catch(e){favoriler=[]}
+      }
+      detayFavori.hidden=!aktifKullaniciId;
+      detayFavoriyiGuncelle();
+    };
     detayFavori.addEventListener('click',()=>{
+      if(!aktifKullaniciId)return;
       const favoride=favoriler.includes(id);
       favoriler=favoride?favoriler.filter(urunId=>urunId!==id):[...favoriler,id];
-      localStorage.setItem('elay_favoriler',JSON.stringify(favoriler));
+      localStorage.setItem(favoriAnahtari(),JSON.stringify(favoriler));
       detayFavoriyiGuncelle();
       kucukBildirimGoster(favoride?'♡ Favorilerden çıkarıldı':'♥ Favorilere eklendi');
     });
-    detayFavoriyiGuncelle();
 
     const aciklamaSekmesi=document.getElementById('aciklamaSekmesi');
     const yorumSekmesi=document.getElementById('yorumSekmesi');
@@ -365,16 +382,22 @@
     const app=getApps().length?getApp():initializeApp(firebaseConfig);
     const auth=getAuth(app);
     const uyeBaglanti=document.getElementById('uyeBaglanti');
+    const profilMenu=document.getElementById('profilMenu');
+    const profilAd=document.getElementById('profilAd');
     const cikisBtn=document.getElementById('cikisBtn');
     onAuthStateChanged(auth,kullanici=>{
       if(kullanici){
-        uyeBaglanti.textContent='👤 '+(kullanici.displayName||kullanici.email||'Hesabım');
-        uyeBaglanti.href='uye.html';
-        cikisBtn.hidden=false;
+        uyeBaglanti.hidden=true;
+        profilAd.textContent=kullanici.displayName||kullanici.email?.split('@')[0]||'Hesabım';
+        profilMenu.hidden=false;
+        window.favorileriEtkinlestir(kullanici.uid);
       }else{
+        uyeBaglanti.hidden=false;
         uyeBaglanti.textContent='👤 Üye Ol / Giriş Yap';
         uyeBaglanti.href='uye.html';
-        cikisBtn.hidden=true;
+        profilMenu.hidden=true;
+        profilMenu.open=false;
+        window.favorileriEtkinlestir(null);
       }
     });
     cikisBtn.addEventListener('click',async()=>{await signOut(auth);location.href='index.html'});
