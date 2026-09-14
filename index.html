@@ -168,7 +168,7 @@ header a {
     }
 }
   </style>
-  <link rel="stylesheet" href="tema.css?v=19"/>
+  <link rel="stylesheet" href="tema.css?v=20"/>
   <script src="analitik.js?v=1" defer></script>
  </head>
  <body>
@@ -262,6 +262,29 @@ header a {
   <h2>Öne Çıkan Ürünler</h2>
  </div>
 </div>
+
+<section class="urun-araclari" aria-label="Ürün arama ve sıralama">
+ <label class="urun-arama" for="urunArama">
+  <span class="arama-simgesi" aria-hidden="true">⌕</span>
+  <input id="urunArama" type="search" placeholder="Ürün ara…" autocomplete="off"/>
+ </label>
+ <label class="urun-siralama" for="urunSiralama">
+  <span>Sırala</span>
+  <select id="urunSiralama">
+   <option value="onerilen">Önerilen sıralama</option>
+   <option value="fiyat-artan">Fiyat: düşükten yükseğe</option>
+   <option value="fiyat-azalan">Fiyat: yüksekten düşüğe</option>
+   <option value="puan-azalan">Puana göre</option>
+   <option value="ad-artan">İsme göre A–Z</option>
+  </select>
+ </label>
+ <label class="stok-filtresi" for="stokFiltresi">
+  <input id="stokFiltresi" type="checkbox"/>
+  <span>Sadece stokta olanlar</span>
+ </label>
+ <button class="filtre-temizle" id="filtreTemizle" type="button">Temizle</button>
+</section>
+<p class="urun-sonuc" id="urunSonuc" aria-live="polite"></p>
 
    <div class="urunler">
    <div class="urun" data-kategori="bileklik" onclick="urunDetay('mouse')">
@@ -396,6 +419,7 @@ header a {
      <div class="stok">🟢 Stokta Var</div>
      <button class="sepet-btn" onclick="sepeteEkle(event,'Türk Bayrağı Filografi Tablosu',6500,'turk-bayragi-01.webp')">🛒 Sepete Ekle</button>
     </article>
+    <p class="urun-bos" id="urunBos" hidden>Aramana uygun ürün bulunamadı. Filtreleri temizleyerek bütün ürünleri görebilirsin.</p>
    </div>
 
 	  </div>
@@ -431,36 +455,103 @@ function sepeteEkle(e,ad,fiyat,resim) {
     localStorage.setItem('sepet',JSON.stringify(sepet));
     sepetGoster()
 }
-function kategoriGoster(kategori, buton) {
+const urunListesi = document.querySelector('.urunler');
+const urunKartlari = Array.from(document.querySelectorAll('.urun'));
+const urunArama = document.getElementById('urunArama');
+const urunSiralama = document.getElementById('urunSiralama');
+const stokFiltresi = document.getElementById('stokFiltresi');
+const urunSonuc = document.getElementById('urunSonuc');
+const urunBos = document.getElementById('urunBos');
+let seciliKategori = 'hepsi';
 
+urunKartlari.forEach(function (urun, sira) {
+    urun.dataset.sira = String(sira);
+    const fiyatMetni = urun.querySelector('.fiyat')?.textContent || '0';
+    urun.dataset.fiyat = fiyatMetni.replace(/\D/g, '') || '0';
+});
+
+function metniSadelestir(metin) {
+    return String(metin || '')
+        .toLocaleLowerCase('tr-TR')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/ı/g, 'i');
+}
+
+function urunPuani(urun) {
+    const puanMetni = urun.querySelector('.puan')?.textContent || '';
+    const eslesme = puanMetni.match(/([0-5](?:[.,]\d+)?)/);
+    return eslesme ? Number(eslesme[1].replace(',', '.')) : 0;
+}
+
+function filtreleVeSirala() {
+    const aranan = metniSadelestir(urunArama.value.trim());
+    const yalnizcaStokta = stokFiltresi.checked;
+    let gorunenUrunSayisi = 0;
+
+    urunKartlari.forEach(function (urun) {
+        const kategoriler = (urun.getAttribute('data-kategori') || '').split(/\s+/);
+        const ad = metniSadelestir(urun.querySelector('h2')?.textContent);
+        const stokta = metniSadelestir(urun.querySelector('.stok')?.textContent).includes('stokta var');
+        const kategoriUygun = seciliKategori === 'hepsi' || kategoriler.includes(seciliKategori);
+        const aramaUygun = !aranan || ad.includes(aranan);
+        const stokUygun = !yalnizcaStokta || stokta;
+        const goster = kategoriUygun && aramaUygun && stokUygun;
+
+        urun.style.display = goster ? '' : 'none';
+        if (goster) gorunenUrunSayisi += 1;
+    });
+
+    const siralama = urunSiralama.value;
+    const siraliKartlar = urunKartlari.slice().sort(function (a, b) {
+        if (siralama === 'fiyat-artan') return Number(a.dataset.fiyat) - Number(b.dataset.fiyat);
+        if (siralama === 'fiyat-azalan') return Number(b.dataset.fiyat) - Number(a.dataset.fiyat);
+        if (siralama === 'puan-azalan') return urunPuani(b) - urunPuani(a);
+        if (siralama === 'ad-artan') {
+            const aAdi = a.querySelector('h2')?.textContent || '';
+            const bAdi = b.querySelector('h2')?.textContent || '';
+            return aAdi.localeCompare(bAdi, 'tr');
+        }
+        return Number(a.dataset.sira) - Number(b.dataset.sira);
+    });
+
+    siraliKartlar.forEach(function (urun) {
+        urunListesi.insertBefore(urun, urunBos);
+    });
+
+    urunBos.hidden = gorunenUrunSayisi !== 0;
+    urunSonuc.textContent = gorunenUrunSayisi + (gorunenUrunSayisi === 1 ? ' ürün gösteriliyor' : ' ürün gösteriliyor');
+}
+
+function kategoriGoster(kategori, buton) {
+    seciliKategori = kategori;
     document.querySelectorAll('.kategoriler button').forEach(function (b) {
         b.classList.remove('aktif');
     });
     if (buton) buton.classList.add('aktif');
-
-    const urunler = document.querySelectorAll(".urun");
-
-    urunler.forEach(function(urun) {
-
-        const urunKategorileri = (urun.getAttribute("data-kategori") || "").split(/\s+/);
-
-        if (kategori === "hepsi") {
-
-            urun.style.display = "";
-
-        } else if (urunKategorileri.includes(kategori)) {
-
-            urun.style.display = "";
-
-        } else {
-
-            urun.style.display = "none";
-
-        }
-
-    });
-
+    filtreleVeSirala();
 }
+
+urunArama.addEventListener('input', filtreleVeSirala);
+urunSiralama.addEventListener('change', filtreleVeSirala);
+stokFiltresi.addEventListener('change', filtreleVeSirala);
+document.getElementById('filtreTemizle').addEventListener('click', function () {
+    urunArama.value = '';
+    urunSiralama.value = 'onerilen';
+    stokFiltresi.checked = false;
+    const tumUrunlerButonu = document.querySelector('.kategoriler button');
+    kategoriGoster('hepsi', tumUrunlerButonu);
+    urunArama.focus();
+});
+
+const puanDegisikligi = new MutationObserver(function () {
+    if (urunSiralama.value === 'puan-azalan') filtreleVeSirala();
+});
+document.querySelectorAll('.urun .puan').forEach(function (puan) {
+    puanDegisikligi.observe(puan, { childList: true, characterData: true, subtree: true });
+});
+
+filtreleVeSirala();
 function sepetGoster() {
     document.getElementById('sepetSayi').textContent=sepet.length;
 }
