@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Profilim | Elay Filografi</title>
+  <meta name="description" content="Elay Filografi hesap, favoriler ve değerlendirmeler sayfası.">
+  <link rel="stylesheet" href="tema.css?v=23">
+  <link rel="stylesheet" href="profil.css?v=1">
+  <script src="analitik.js?v=1" defer></script>
+</head>
+<body class="profil-sayfasi">
+  <header>
+    <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa">
+      <img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu">
+    </a>
+    <nav>
+      <a href="index.html">Ürünler</a>
+      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+      <a class="profil-aktif" href="profil.html">👤 Profilim</a>
+      <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
+    </nav>
+  </header>
+
+  <main class="profil-ana">
+    <div class="profil-baslik">
+      <div>
+        <span>HESABIM</span>
+        <h1>Profilim</h1>
+        <p>Hesabınızı ve tercihlerinizi yönetin.</p>
+      </div>
+      <p class="profil-soz">Sanat, her zaman sizinle…</p>
+    </div>
+
+    <div class="profil-duzen">
+      <aside class="hesap-karti" aria-label="Hesap bilgileri">
+        <div class="profil-avatar" id="profilAvatar" aria-hidden="true">E</div>
+        <h2 id="profilAd">Yükleniyor…</h2>
+        <p id="profilEposta"></p>
+        <div class="hesap-ayrac"></div>
+        <button class="hesap-kisayol aktif" type="button" data-hedef="favorilerPaneli">♡ Favorilerim</button>
+        <button class="hesap-kisayol" type="button" data-hedef="yorumlarPaneli">▱ Değerlendirmelerim</button>
+        <a class="hesap-kisayol" href="index.html">⌂ Alışverişe Dön</a>
+        <button class="profil-cikis" id="profilCikis" type="button">Çıkış Yap</button>
+      </aside>
+
+      <section class="profil-icerik">
+        <div class="profil-sekmeler" role="tablist" aria-label="Profil bölümleri">
+          <button class="aktif" id="favorilerSekme" type="button" role="tab" aria-selected="true" data-hedef="favorilerPaneli">
+            ♡ Favorilerim <span id="favoriSayi">0</span>
+          </button>
+          <button id="yorumlarSekme" type="button" role="tab" aria-selected="false" data-hedef="yorumlarPaneli">
+            ▱ Değerlendirmelerim <span id="yorumSayi">0</span>
+          </button>
+        </div>
+
+        <div id="favorilerPaneli" class="profil-panel" role="tabpanel" aria-labelledby="favorilerSekme">
+          <div id="favoriListe" class="profil-urunler"></div>
+          <div id="favoriBos" class="profil-bos" hidden>
+            <strong>Henüz favori ürününüz yok.</strong>
+            <p>Beğendiğiniz ürünlerdeki kalp simgesine dokunarak buraya ekleyebilirsiniz.</p>
+            <a href="index.html#urunler">Ürünleri İncele</a>
+          </div>
+        </div>
+
+        <div id="yorumlarPaneli" class="profil-panel" role="tabpanel" aria-labelledby="yorumlarSekme" hidden>
+          <div id="yorumListe" class="profil-yorumlar"></div>
+          <div id="yorumBos" class="profil-bos" hidden>
+            <strong>Henüz değerlendirme yapmadınız.</strong>
+            <p>Satın aldığınız veya incelediğiniz ürünlere puan ve yorum bırakabilirsiniz.</p>
+            <a href="index.html#urunler">Ürünleri İncele</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="ana-footer">
+    <div>
+      <img src="elay-logo.jpeg?v=3" alt="Elay Filografi">
+      <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
+    </div>
+    <nav aria-label="Alt menü">
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="iletisim.html">İletişim</a>
+      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+      <a href="guvenli-alisveris.html">Güvenli Alışveriş</a>
+    </nav>
+  </footer>
+
+  <div class="alt-bildirim" id="profilBildirim" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    import { getApp, getApps, initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+    import { collection, getFirestore, onSnapshot } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKpEI_TzDxA38N30BEjMScnl0GnYabl3c",
+      authDomain: "elaystore-c4d53.firebaseapp.com",
+      projectId: "elaystore-c4d53",
+      storageBucket: "elaystore-c4d53.firebasestorage.app",
+      messagingSenderId: "585341292448",
+      appId: "1:585341292448:web:51ace255ab2fcf89b21ec5",
+      measurementId: "G-YMS32EVTTH"
+    };
+
+    const urunler = {
+      mouse:{ad:"El İşi Bileklik",fiyat:350,resim:"resim.jpg"},
+      tablo01:{ad:"Zarif Hat Filografi Tablosu",fiyat:2500,resim:"tablo-01.png"},
+      tablo02:{ad:"Turkuaz Hat Filografi Tablosu",fiyat:8500,resim:"tablo-02.png"},
+      tablo03:{ad:"Lale Motifli Filografi Tablosu",fiyat:2200,resim:"tablo-03.png"},
+      tablo04:{ad:"Siyah Zemin Hat Filografi Tablosu",fiyat:16500,resim:"tablo-04.png"},
+      tablo05:{ad:"Geometrik Altın Filografi Tablosu",fiyat:12500,resim:"tablo-05.png"},
+      tablo06:{ad:"Allah Lafzı Filografi Tablosu",fiyat:4500,resim:"tablo-06.png"},
+      tablo07:{ad:"Bereket Duası Filografi Tablosu",fiyat:9500,resim:"tablo-07.png"},
+      tablo08:{ad:"Yuvarlak Ahşap Filografi Tablosu",fiyat:11500,resim:"tablo-08.png"},
+      tablo09:{ad:"Vav Filografi Tablosu",fiyat:3500,resim:"tablo-09.png"},
+      tablo10:{ad:"Gümüş Zemin Hat Filografi Tablosu",fiyat:8500,resim:"tablo-10.png"},
+      tablo11:{ad:"İstanbul Silüeti Filografi Tablosu",fiyat:8500,resim:"istanbul-silueti-01.webp"},
+      tablo12:{ad:"Galata Kulesi Filografi Tablosu",fiyat:7500,resim:"galata-lale-01.webp"},
+      tablo13:{ad:"Renkli Besmele Filografi Tablosu",fiyat:7600,resim:"besmele-renkli-01.webp"},
+      tablo14:{ad:"Türk Bayrağı Filografi Tablosu",fiyat:6500,resim:"turk-bayragi-01.webp"}
+    };
+
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    let kullanici = null;
+    let favoriler = [];
+    let tumYorumlar = [];
+    let bildirimZamanlayici;
+
+    function sepetSayisiniGuncelle() {
+      let sepet = [];
+      try { sepet = JSON.parse(localStorage.getItem("sepet") || "[]"); } catch (e) {}
+      document.getElementById("sepetSayi").textContent = Array.isArray(sepet) ? sepet.length : 0;
+    }
+
+    function bildirimGoster(metin) {
+      const kutu = document.getElementById("profilBildirim");
+      kutu.textContent = metin;
+      kutu.classList.remove("goster");
+      void kutu.offsetWidth;
+      kutu.classList.add("goster");
+      clearTimeout(bildirimZamanlayici);
+      bildirimZamanlayici = setTimeout(function(){ kutu.classList.remove("goster"); }, 2200);
+    }
+
+    function tarihYaz(deger) {
+      if (!deger) return "Az önce";
+      const tarih = deger.toDate ? deger.toDate() : new Date(deger);
+      return new Intl.DateTimeFormat("tr-TR", {day:"numeric",month:"long",year:"numeric"}).format(tarih);
+    }
+
+    function puanBilgisi(urunId) {
+      const yorumlar = tumYorumlar.filter(function(y){ return y.productId === urunId; });
+      if (!yorumlar.length) return {metin:"Henüz değerlendirme yok",sayi:0};
+      const ortalama = yorumlar.reduce(function(t,y){ return t + Number(y.rating || 0); },0) / yorumlar.length;
+      return {metin:"★ " + ortalama.toFixed(1) + " · " + yorumlar.length + " yorum",sayi:yorumlar.length};
+    }
+
+    function favorileriKaydet() {
+      if (!kullanici) return;
+      localStorage.setItem("elay_favoriler_" + kullanici.uid, JSON.stringify(favoriler));
+    }
+
+    function favoriKarti(urunId) {
+      const urun = urunler[urunId];
+      if (!urun) return null;
+      const kart = document.createElement("article");
+      kart.className = "profil-urun-karti";
+
+      const kalp = document.createElement("button");
+      kalp.className = "profil-kalp";
+      kalp.type = "button";
+      kalp.setAttribute("aria-label", "Favorilerden çıkar");
+      kalp.textContent = "♥";
+      kalp.addEventListener("click", function(){
+        favoriler = favoriler.filter(function(id){ return id !== urunId; });
+        favorileriKaydet();
+        favorileriGoster();
+        bildirimGoster("♡ Favorilerden çıkarıldı");
+      });
+
+      const resim = document.createElement("img");
+      resim.src = urun.resim;
+      resim.alt = urun.ad;
+
+      const ad = document.createElement("h3");
+      ad.textContent = urun.ad;
+
+      const puan = document.createElement("p");
+      puan.className = "profil-puan";
+      puan.textContent = puanBilgisi(urunId).metin;
+
+      const fiyat = document.createElement("strong");
+      fiyat.className = "profil-fiyat";
+      fiyat.textContent = Number(urun.fiyat).toLocaleString("tr-TR") + " TL";
+
+      const incele = document.createElement("a");
+      incele.href = "urun.html?urun=" + encodeURIComponent(urunId);
+      incele.textContent = "Ürünü İncele →";
+
+      kart.append(kalp,resim,ad,puan,fiyat,incele);
+      return kart;
+    }
+
+    function favorileriGoster() {
+      const liste = document.getElementById("favoriListe");
+      const bos = document.getElementById("favoriBos");
+      liste.replaceChildren();
+      favoriler = favoriler.filter(function(id){ return Boolean(urunler[id]); });
+      document.getElementById("favoriSayi").textContent = favoriler.length;
+      bos.hidden = favoriler.length !== 0;
+      favoriler.forEach(function(id){
+        const kart = favoriKarti(id);
+        if (kart) liste.appendChild(kart);
+      });
+    }
+
+    function yorumlariGoster() {
+      const liste = document.getElementById("yorumListe");
+      const bos = document.getElementById("yorumBos");
+      liste.replaceChildren();
+      const yorumlar = kullanici ? tumYorumlar.filter(function(y){ return y.userId === kullanici.uid; }) : [];
+      document.getElementById("yorumSayi").textContent = yorumlar.length;
+      bos.hidden = yorumlar.length !== 0;
+
+      yorumlar.sort(function(a,b){ return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0); });
+      yorumlar.forEach(function(yorum){
+        const kart = document.createElement("article");
+        kart.className = "profil-yorum-karti";
+        const ust = document.createElement("div");
+        const ad = document.createElement("h3");
+        ad.textContent = yorum.productName || urunler[yorum.productId]?.ad || "Ürün";
+        const tarih = document.createElement("time");
+        tarih.textContent = tarihYaz(yorum.createdAt);
+        ust.append(ad,tarih);
+        const yildiz = document.createElement("p");
+        yildiz.className = "profil-puan";
+        yildiz.textContent = "★".repeat(Number(yorum.rating || 0)) + "☆".repeat(5 - Number(yorum.rating || 0));
+        const metin = document.createElement("p");
+        metin.textContent = yorum.text || "";
+        const incele = document.createElement("a");
+        incele.href = "urun.html?urun=" + encodeURIComponent(yorum.productId || "mouse");
+        incele.textContent = "Ürünü Gör →";
+        kart.append(ust,yildiz,metin,incele);
+        liste.appendChild(kart);
+      });
+    }
+
+    function sekmeAc(panelId) {
+      const favoriAcik = panelId === "favorilerPaneli";
+      document.getElementById("favorilerPaneli").hidden = !favoriAcik;
+      document.getElementById("yorumlarPaneli").hidden = favoriAcik;
+      document.getElementById("favorilerSekme").classList.toggle("aktif",favoriAcik);
+      document.getElementById("yorumlarSekme").classList.toggle("aktif",!favoriAcik);
+      document.getElementById("favorilerSekme").setAttribute("aria-selected",String(favoriAcik));
+      document.getElementById("yorumlarSekme").setAttribute("aria-selected",String(!favoriAcik));
+      document.querySelectorAll(".hesap-kisayol[data-hedef]").forEach(function(b){
+        b.classList.toggle("aktif",b.dataset.hedef === panelId);
+      });
+    }
+
+    document.querySelectorAll("[data-hedef]").forEach(function(buton){
+      buton.addEventListener("click",function(){ sekmeAc(buton.dataset.hedef); });
+    });
+
+    document.getElementById("profilCikis").addEventListener("click", async function(){
+      await signOut(auth);
+      location.href = "index.html";
+    });
+
+    onAuthStateChanged(auth,function(user){
+      if (!user) {
+        location.href = "uye.html?donus=profil.html";
+        return;
+      }
+      kullanici = user;
+      const ad = user.displayName || user.email?.split("@")[0] || "Elay Üyesi";
+      document.getElementById("profilAd").textContent = ad;
+      document.getElementById("profilEposta").textContent = user.email || "";
+      document.getElementById("profilAvatar").textContent = ad.trim().charAt(0).toLocaleUpperCase("tr-TR") || "E";
+      try {
+        favoriler = JSON.parse(localStorage.getItem("elay_favoriler_" + user.uid) || "[]");
+        if (!Array.isArray(favoriler)) favoriler = [];
+      } catch (e) { favoriler = []; }
+      favorileriGoster();
+      yorumlariGoster();
+    });
+
+    onSnapshot(collection(db,"reviews"),function(snapshot){
+      tumYorumlar = snapshot.docs.map(function(belge){ return Object.assign({id:belge.id},belge.data()); });
+      favorileriGoster();
+      yorumlariGoster();
+    },function(){
+      bildirimGoster("Değerlendirmeler şu anda yüklenemedi");
+    });
+
+    sepetSayisiniGuncelle();
+  </script>
+</body>
+</html>
