@@ -168,7 +168,7 @@ header a {
     }
 }
   </style>
-  <link rel="stylesheet" href="tema.css?v=20"/>
+  <link rel="stylesheet" href="tema.css?v=21"/>
   <script src="analitik.js?v=1" defer></script>
  </head>
  <body>
@@ -248,6 +248,10 @@ header a {
 
     <button type="button" onclick="kategoriGoster('motif',this)">
         ♧ Tuğra ve Motifler
+    </button>
+
+    <button type="button" id="favorilerButonu" onclick="favorileriGoster(this)">
+        ♡ Favorilerim
     </button>
 
     <button type="button" onclick="location.href='kisiye-ozel.html'">
@@ -444,7 +448,7 @@ try {
     sepet = [];
 }
 function urunDetay(id) {
-    location.href='urun.html?urun='+encodeURIComponent(id)+'&v=3'
+    location.href='urun.html?urun='+encodeURIComponent(id)+'&v=4'
 }
 function sepeteEkle(e,ad,fiyat,resim) {
     e.stopPropagation();
@@ -453,7 +457,8 @@ function sepeteEkle(e,ad,fiyat,resim) {
     }
     );
     localStorage.setItem('sepet',JSON.stringify(sepet));
-    sepetGoster()
+    sepetGoster();
+    kucukBildirimGoster('✓ Ürün sepete eklendi');
 }
 const urunListesi = document.querySelector('.urunler');
 const urunKartlari = Array.from(document.querySelectorAll('.urun'));
@@ -463,11 +468,77 @@ const stokFiltresi = document.getElementById('stokFiltresi');
 const urunSonuc = document.getElementById('urunSonuc');
 const urunBos = document.getElementById('urunBos');
 let seciliKategori = 'hepsi';
+let sadeceFavoriler = false;
+let favoriler = [];
+try {
+    favoriler = JSON.parse(localStorage.getItem('elay_favoriler') || '[]');
+    if (!Array.isArray(favoriler)) favoriler = [];
+} catch (hata) {
+    favoriler = [];
+}
+
+const altBildirim = document.createElement('div');
+altBildirim.className = 'alt-bildirim';
+altBildirim.setAttribute('role', 'status');
+altBildirim.setAttribute('aria-live', 'polite');
+document.body.appendChild(altBildirim);
+let bildirimZamanlayici;
+
+function kucukBildirimGoster(mesaj) {
+    altBildirim.textContent = mesaj;
+    altBildirim.classList.remove('goster');
+    void altBildirim.offsetWidth;
+    altBildirim.classList.add('goster');
+    clearTimeout(bildirimZamanlayici);
+    bildirimZamanlayici = setTimeout(function () {
+        altBildirim.classList.remove('goster');
+    }, 2200);
+}
+
+function favorileriKaydet() {
+    localStorage.setItem('elay_favoriler', JSON.stringify(favoriler));
+}
+
+function favoriButonunuGuncelle(buton, urunId) {
+    const favoride = favoriler.includes(urunId);
+    buton.classList.toggle('aktif', favoride);
+    buton.setAttribute('aria-pressed', String(favoride));
+    buton.setAttribute('aria-label', favoride ? 'Ürünü favorilerden çıkar' : 'Ürünü favorilere ekle');
+    buton.title = favoride ? 'Favorilerden çıkar' : 'Favorilere ekle';
+    buton.textContent = favoride ? '♥' : '♡';
+}
+
+function favoriDegistir(olay, urunId) {
+    olay.stopPropagation();
+    const favoride = favoriler.includes(urunId);
+    favoriler = favoride ? favoriler.filter(function (id) { return id !== urunId; }) : [...favoriler, urunId];
+    favorileriKaydet();
+    document.querySelectorAll('.favori-btn[data-urun-id="' + urunId + '"]').forEach(function (buton) {
+        favoriButonunuGuncelle(buton, urunId);
+    });
+    kucukBildirimGoster(favoride ? '♡ Favorilerden çıkarıldı' : '♥ Favorilere eklendi');
+    filtreleVeSirala();
+}
 
 urunKartlari.forEach(function (urun, sira) {
     urun.dataset.sira = String(sira);
     const fiyatMetni = urun.querySelector('.fiyat')?.textContent || '0';
     urun.dataset.fiyat = fiyatMetni.replace(/\D/g, '') || '0';
+    const detayIslemi = urun.getAttribute('onclick') || '';
+    const idEslesmesi = detayIslemi.match(/urunDetay\('([^']+)'\)/);
+    if (idEslesmesi) {
+        const urunId = idEslesmesi[1];
+        urun.dataset.urunId = urunId;
+        const favoriButonu = document.createElement('button');
+        favoriButonu.type = 'button';
+        favoriButonu.className = 'favori-btn';
+        favoriButonu.dataset.urunId = urunId;
+        favoriButonu.addEventListener('click', function (olay) {
+            favoriDegistir(olay, urunId);
+        });
+        favoriButonunuGuncelle(favoriButonu, urunId);
+        urun.appendChild(favoriButonu);
+    }
 });
 
 function metniSadelestir(metin) {
@@ -496,7 +567,8 @@ function filtreleVeSirala() {
         const kategoriUygun = seciliKategori === 'hepsi' || kategoriler.includes(seciliKategori);
         const aramaUygun = !aranan || ad.includes(aranan);
         const stokUygun = !yalnizcaStokta || stokta;
-        const goster = kategoriUygun && aramaUygun && stokUygun;
+        const favoriUygun = !sadeceFavoriler || favoriler.includes(urun.dataset.urunId);
+        const goster = kategoriUygun && aramaUygun && stokUygun && favoriUygun;
 
         urun.style.display = goster ? '' : 'none';
         if (goster) gorunenUrunSayisi += 1;
@@ -525,10 +597,22 @@ function filtreleVeSirala() {
 
 function kategoriGoster(kategori, buton) {
     seciliKategori = kategori;
+    sadeceFavoriler = false;
     document.querySelectorAll('.kategoriler button').forEach(function (b) {
         b.classList.remove('aktif');
     });
     if (buton) buton.classList.add('aktif');
+    filtreleVeSirala();
+}
+
+function favorileriGoster(buton) {
+    seciliKategori = 'hepsi';
+    sadeceFavoriler = true;
+    document.querySelectorAll('.kategoriler button').forEach(function (b) {
+        b.classList.remove('aktif');
+    });
+    if (buton) buton.classList.add('aktif');
+    if (!favoriler.length) kucukBildirimGoster('Henüz favori ürün seçmediniz');
     filtreleVeSirala();
 }
 

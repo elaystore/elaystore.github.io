@@ -989,7 +989,7 @@ header nav button {
 
 .kategoriler {
     display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     margin: 0 0 46px !important;
     padding-bottom: 3px;
 }
@@ -1143,6 +1143,7 @@ header nav button {
 }
 
 .urun {
+    position: relative;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -1152,6 +1153,64 @@ header nav button {
     background: var(--elay-kart) !important;
     box-shadow: 0 8px 24px rgba(45, 38, 38, .07) !important;
     transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.favori-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 3;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    margin: 0;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(185, 174, 166, .72);
+    border-radius: 50%;
+    color: #8f1725;
+    background: rgba(255, 255, 255, .94);
+    box-shadow: 0 5px 15px rgba(38, 30, 26, .12);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform .18s ease, color .18s ease, background .18s ease;
+}
+
+.favori-btn:hover {
+    transform: scale(1.07);
+}
+
+.favori-btn.aktif {
+    border-color: #a80f22;
+    color: #fff;
+    background: #a80f22;
+}
+
+.alt-bildirim {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    z-index: 20000;
+    max-width: calc(100% - 32px);
+    padding: 11px 18px;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(31, 29, 28, .94);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .22);
+    font-size: 14px;
+    font-weight: 650;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, 18px);
+    transition: opacity .2s ease, transform .2s ease;
+    pointer-events: none;
+}
+
+.alt-bildirim.goster {
+    opacity: 1;
+    transform: translate(-50%, 0);
 }
 
 .urun:hover {
@@ -1764,6 +1823,7 @@ body.galeri-acik {
 }
 
 .yeni-detay .detay-aksiyonlar .detay-sepet,
+.yeni-detay .detay-aksiyonlar .detay-favori,
 .yeni-detay .detay-aksiyonlar .detay-whatsapp {
     display: inline-flex;
     align-items: center;
@@ -1787,11 +1847,23 @@ body.galeri-acik {
 }
 
 .yeni-detay .detay-aksiyonlar .detay-whatsapp {
+    grid-column: 1 / -1;
     color: #9f1020;
     background: #fff;
 }
 
+.yeni-detay .detay-aksiyonlar .detay-favori {
+    color: #9f1020;
+    background: #fff;
+}
+
+.yeni-detay .detay-aksiyonlar .detay-favori.aktif {
+    color: #fff;
+    background: #9f1020;
+}
+
 .yeni-detay .detay-aksiyonlar .detay-sepet:hover,
+.yeni-detay .detay-aksiyonlar .detay-favori:hover,
 .yeni-detay .detay-aksiyonlar .detay-whatsapp:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(70, 42, 26, .14);
@@ -2005,6 +2077,16 @@ body.galeri-acik {
 
     .detay-aksiyonlar {
         grid-template-columns: 1fr;
+    }
+
+    .yeni-detay .detay-aksiyonlar .detay-whatsapp {
+        grid-column: auto;
+    }
+
+    .alt-bildirim {
+        bottom: 16px;
+        padding: 10px 15px;
+        font-size: 13px;
     }
 
     .detay-sekmeler {

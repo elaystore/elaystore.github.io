@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=19">
+  <link rel="stylesheet" href="tema.css?v=21">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
@@ -48,6 +48,7 @@
         <div class="stok" id="stok">● Stokta Var</div>
         <div class="detay-aksiyonlar">
           <button class="detay-sepet" type="button" onclick="sepeteEkle()">🛒 Sepete Ekle</button>
+          <button class="detay-favori" id="detayFavori" type="button" aria-pressed="false">♡ Favorilere Ekle</button>
           <a class="detay-whatsapp" id="whatsappSiparis" href="#" target="_blank" rel="noopener noreferrer">WhatsApp ile Sipariş</a>
         </div>
 
@@ -260,14 +261,48 @@
       document.getElementById('sepetSayi').textContent=s.length;
       return s;
     }
+
+    const altBildirim=document.createElement('div');
+    altBildirim.className='alt-bildirim';
+    altBildirim.setAttribute('role','status');
+    altBildirim.setAttribute('aria-live','polite');
+    document.body.appendChild(altBildirim);
+    let bildirimZamanlayici;
+    function kucukBildirimGoster(mesaj){
+      altBildirim.textContent=mesaj;
+      altBildirim.classList.remove('goster');
+      void altBildirim.offsetWidth;
+      altBildirim.classList.add('goster');
+      clearTimeout(bildirimZamanlayici);
+      bildirimZamanlayici=setTimeout(()=>altBildirim.classList.remove('goster'),2200);
+    }
+
     function sepeteEkle(){
       const s=sepetSayisiniGuncelle();
       s.push({id,ad:p.ad,fiyat:p.fiyat,resim:p.resim});
       localStorage.setItem('sepet',JSON.stringify(s));
       sepetSayisiniGuncelle();
-      alert(p.ad+' sepete eklendi! 🛒');
+      kucukBildirimGoster('✓ Ürün sepete eklendi');
     }
     sepetSayisiniGuncelle();
+
+    let favoriler=[];
+    try{favoriler=JSON.parse(localStorage.getItem('elay_favoriler')||'[]');if(!Array.isArray(favoriler))favoriler=[]}catch(e){favoriler=[]}
+    const detayFavori=document.getElementById('detayFavori');
+    function detayFavoriyiGuncelle(){
+      const favoride=favoriler.includes(id);
+      detayFavori.classList.toggle('aktif',favoride);
+      detayFavori.setAttribute('aria-pressed',String(favoride));
+      detayFavori.textContent=favoride?'♥ Favorilerden Çıkar':'♡ Favorilere Ekle';
+    }
+    detayFavori.addEventListener('click',()=>{
+      const favoride=favoriler.includes(id);
+      favoriler=favoride?favoriler.filter(urunId=>urunId!==id):[...favoriler,id];
+      localStorage.setItem('elay_favoriler',JSON.stringify(favoriler));
+      detayFavoriyiGuncelle();
+      kucukBildirimGoster(favoride?'♡ Favorilerden çıkarıldı':'♥ Favorilere eklendi');
+    });
+    detayFavoriyiGuncelle();
 
     const aciklamaSekmesi=document.getElementById('aciklamaSekmesi');
     const yorumSekmesi=document.getElementById('yorumSekmesi');
@@ -307,7 +342,7 @@
       const urun=urunler[urunId];
       const baglanti=document.createElement('a');
       baglanti.className='benzer-kart';
-      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=3';
+      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=4';
       const gorsel=document.createElement('img');
       gorsel.src=urun.resim;
       gorsel.alt=urun.ad;
