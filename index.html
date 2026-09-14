@@ -168,7 +168,7 @@ header a {
     }
 }
   </style>
-  <link rel="stylesheet" href="tema.css?v=21"/>
+  <link rel="stylesheet" href="tema.css?v=23"/>
   <script src="analitik.js?v=1" defer></script>
  </head>
  <body>
@@ -181,14 +181,6 @@ header a {
         Ürünler
     </a>
 
-    <a href="hakkimizda.html">
-        Hakkımızda
-    </a>
-
-    <a href="iletisim.html">
-        İletişim
-    </a>
-
     <a href="kisiye-ozel.html">
         Kişiye Özel Sipariş
     </a>
@@ -197,7 +189,16 @@ header a {
         👤 Üye Ol / Giriş Yap
     </a>
 
-    <button id="cikisBtn" type="button" hidden>Çıkış Yap</button>
+    <details class="profil-menu" id="profilMenu" hidden>
+      <summary>👤 Profilim</summary>
+      <div class="profil-acilir">
+        <strong id="profilAd"></strong>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="iletisim.html">İletişim</a>
+        <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+        <button id="cikisBtn" type="button">Çıkış Yap</button>
+      </div>
+    </details>
 
     <a href="sepet.html">
         🛒 Sepet (
@@ -248,10 +249,6 @@ header a {
 
     <button type="button" onclick="kategoriGoster('motif',this)">
         ♧ Tuğra ve Motifler
-    </button>
-
-    <button type="button" id="favorilerButonu" onclick="favorileriGoster(this)">
-        ♡ Favorilerim
     </button>
 
     <button type="button" onclick="location.href='kisiye-ozel.html'">
@@ -469,12 +466,25 @@ const urunSonuc = document.getElementById('urunSonuc');
 const urunBos = document.getElementById('urunBos');
 let seciliKategori = 'hepsi';
 let sadeceFavoriler = false;
+let aktifKullaniciId = null;
 let favoriler = [];
-try {
-    favoriler = JSON.parse(localStorage.getItem('elay_favoriler') || '[]');
-    if (!Array.isArray(favoriler)) favoriler = [];
-} catch (hata) {
-    favoriler = [];
+
+function favoriDepolamaAnahtari() {
+    return aktifKullaniciId ? 'elay_favoriler_' + aktifKullaniciId : null;
+}
+
+function favorileriYukle() {
+    const anahtar = favoriDepolamaAnahtari();
+    if (!anahtar) {
+        favoriler = [];
+        return;
+    }
+    try {
+        favoriler = JSON.parse(localStorage.getItem(anahtar) || '[]');
+        if (!Array.isArray(favoriler)) favoriler = [];
+    } catch (hata) {
+        favoriler = [];
+    }
 }
 
 const altBildirim = document.createElement('div');
@@ -496,7 +506,8 @@ function kucukBildirimGoster(mesaj) {
 }
 
 function favorileriKaydet() {
-    localStorage.setItem('elay_favoriler', JSON.stringify(favoriler));
+    const anahtar = favoriDepolamaAnahtari();
+    if (anahtar) localStorage.setItem(anahtar, JSON.stringify(favoriler));
 }
 
 function favoriButonunuGuncelle(buton, urunId) {
@@ -510,6 +521,7 @@ function favoriButonunuGuncelle(buton, urunId) {
 
 function favoriDegistir(olay, urunId) {
     olay.stopPropagation();
+    if (!aktifKullaniciId) return;
     const favoride = favoriler.includes(urunId);
     favoriler = favoride ? favoriler.filter(function (id) { return id !== urunId; }) : [...favoriler, urunId];
     favorileriKaydet();
@@ -533,6 +545,7 @@ urunKartlari.forEach(function (urun, sira) {
         favoriButonu.type = 'button';
         favoriButonu.className = 'favori-btn';
         favoriButonu.dataset.urunId = urunId;
+        favoriButonu.hidden = true;
         favoriButonu.addEventListener('click', function (olay) {
             favoriDegistir(olay, urunId);
         });
@@ -605,16 +618,28 @@ function kategoriGoster(kategori, buton) {
     filtreleVeSirala();
 }
 
-function favorileriGoster(buton) {
+window.favorileriEtkinlestir = function (kullaniciId) {
+    aktifKullaniciId = kullaniciId || null;
+    sadeceFavoriler = false;
+    favorileriYukle();
+    document.querySelectorAll('.favori-btn').forEach(function (buton) {
+        buton.hidden = !aktifKullaniciId;
+        favoriButonunuGuncelle(buton, buton.dataset.urunId);
+    });
+    filtreleVeSirala();
+};
+
+window.favorileriGoster = function () {
+    if (!aktifKullaniciId) return;
     seciliKategori = 'hepsi';
     sadeceFavoriler = true;
     document.querySelectorAll('.kategoriler button').forEach(function (b) {
         b.classList.remove('aktif');
     });
-    if (buton) buton.classList.add('aktif');
     if (!favoriler.length) kucukBildirimGoster('Henüz favori ürün seçmediniz');
     filtreleVeSirala();
-}
+    document.getElementById('urunler')?.scrollIntoView({behavior:'smooth'});
+};
 
 urunArama.addEventListener('input', filtreleVeSirala);
 urunSiralama.addEventListener('change', filtreleVeSirala);
@@ -662,23 +687,33 @@ sepetGoster();
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const uyeBaglanti = document.getElementById("uyeBaglanti");
+    const profilMenu = document.getElementById("profilMenu");
+    const profilAd = document.getElementById("profilAd");
     const cikisBtn = document.getElementById("cikisBtn");
 
     onAuthStateChanged(auth, function (user) {
         if (user) {
             const ad = user.displayName || user.email.split("@")[0];
-            uyeBaglanti.textContent = "👋 Hoş geldiniz, " + ad;
-            uyeBaglanti.removeAttribute("href");
-            cikisBtn.hidden = false;
+            uyeBaglanti.hidden = true;
+            profilAd.textContent = ad;
+            profilMenu.hidden = false;
+            window.favorileriEtkinlestir(user.uid);
+            if (new URLSearchParams(location.search).get("gorunum") === "favoriler") {
+                window.favorileriGoster();
+            }
         } else {
+            uyeBaglanti.hidden = false;
             uyeBaglanti.textContent = "👤 Üye Ol / Giriş Yap";
             uyeBaglanti.href = "uye.html";
-            cikisBtn.hidden = true;
+            profilMenu.hidden = true;
+            profilMenu.open = false;
+            window.favorileriEtkinlestir(null);
         }
     });
 
     cikisBtn.addEventListener("click", async function () {
         await signOut(auth);
+        location.href = "index.html";
     });
   </script>
 	<script type="module" src="urun-puanlari.js?v=1"></script>
