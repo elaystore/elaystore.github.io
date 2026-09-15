@@ -2406,3 +2406,157 @@ body.galeri-acik {
         left: 27px;
     }
 }
+
+
+/* Profil açılır menüsü grupları */
+.profil-acilir {
+    min-width: 260px;
+}
+
+.profil-acilir .profil-ayirici {
+    display: block;
+    height: 1px;
+    margin: 5px 8px;
+    background: #eee5df;
+}
+
+/* Sık sorulan sorular sayfası */
+.sss-sayfasi {
+    min-height: 100vh;
+    background: #f7f4f0;
+}
+
+.sss-ana {
+    width: min(980px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 48px 0 64px;
+}
+
+.sss-baslik {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.sss-baslik span {
+    color: #a81022;
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: .18em;
+}
+
+.sss-baslik h1 {
+    margin: 10px 0 12px;
+    color: #1d1b1a;
+    font-size: clamp(34px, 5vw, 50px);
+    letter-spacing: -.035em;
+}
+
+.sss-baslik p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: #706962;
+    line-height: 1.65;
+}
+
+.sss-liste {
+    display: grid;
+    gap: 12px;
+}
+
+.sss-liste details {
+    border: 1px solid #e5ddd6;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 7px 22px rgba(50, 38, 30, .045);
+    overflow: hidden;
+}
+
+.sss-liste summary {
+    position: relative;
+    padding: 20px 54px 20px 22px;
+    color: #282522;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+}
+
+.sss-liste summary::-webkit-details-marker {
+    display: none;
+}
+
+.sss-liste summary::after {
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    color: #a81022;
+    content: "+";
+    font-size: 25px;
+    font-weight: 400;
+    transform: translateY(-50%);
+}
+
+.sss-liste details[open] summary {
+    color: #a81022;
+}
+
+.sss-liste details[open] summary::after {
+    content: "−";
+}
+
+.sss-cevap {
+    padding: 0 22px 21px;
+    border-top: 1px solid #f0e9e3;
+    color: #625c56;
+    line-height: 1.7;
+}
+
+.sss-cevap p {
+    margin: 16px 0 0;
+}
+
+.sss-destek {
+    margin-top: 28px;
+    padding: 26px;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(135deg, #b71126, #850817);
+    text-align: center;
+}
+
+.sss-destek h2 {
+    margin: 0 0 8px;
+    font-size: 23px;
+}
+
+.sss-destek p {
+    margin: 0 0 18px;
+    color: #f5dfe3;
+}
+
+.sss-destek a {
+    display: inline-flex;
+    padding: 11px 18px;
+    border-radius: 7px;
+    color: #971022;
+    background: #fff;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .sss-ana {
+        width: calc(100% - 24px);
+        padding-top: 30px;
+    }
+
+    .sss-liste summary {
+        padding: 17px 48px 17px 17px;
+        font-size: 15px;
+    }
+
+    .sss-cevap {
+        padding: 0 17px 18px;
+        font-size: 14px;
+    }
+}
