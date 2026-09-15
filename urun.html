@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=23">
+  <link rel="stylesheet" href="tema.css?v=24">
   <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
@@ -118,6 +118,14 @@
       </div>
       <div id="benzerListe" class="benzer-liste"></div>
     </section>
+
+    <section class="son-goruntulenen" id="sonGoruntulenenBolumu" aria-labelledby="sonGoruntulenenBaslik" hidden>
+      <div class="son-goruntulenen-ust">
+        <h2 id="sonGoruntulenenBaslik">Son Görüntülediğiniz Ürünler</h2>
+        <button id="gecmisiTemizle" type="button">Geçmişi Temizle</button>
+      </div>
+      <div id="sonGoruntulenenListe" class="son-goruntulenen-liste"></div>
+    </section>
   </main>
 
   <div id="galeriModal" class="galeri-modal" hidden role="dialog" aria-modal="true" aria-label="Büyütülmüş ürün fotoğrafı">
@@ -179,6 +187,14 @@
     };
     const id=new URLSearchParams(location.search).get('urun')||'mouse';
     const p=urunler[id]||urunler.mouse;
+
+    const sonGoruntulenenAnahtari='elay_son_goruntulenenler';
+    let oncekiGoruntulenenler=[];
+    try{
+      oncekiGoruntulenenler=JSON.parse(localStorage.getItem(sonGoruntulenenAnahtari)||'[]');
+      if(!Array.isArray(oncekiGoruntulenenler))oncekiGoruntulenenler=[];
+    }catch(e){oncekiGoruntulenenler=[]}
+    oncekiGoruntulenenler=oncekiGoruntulenenler.filter(urunId=>urunler[urunId]&&urunId!==id).slice(0,4);
     if(!p.puan)p.puan='☆ Henüz değerlendirme yok';
     if(!p.stok)p.stok='● Stokta Var';
     if(!p.oz)p.oz=[...ortakOzellikler];
@@ -374,6 +390,41 @@
       baglanti.append(gorsel,ad,fiyat,incele);
       benzerListe.appendChild(baglanti);
     });
+
+    const sonBolum=document.getElementById('sonGoruntulenenBolumu');
+    const sonListe=document.getElementById('sonGoruntulenenListe');
+    function sonGoruntulenenleriCiz(){
+      sonListe.replaceChildren();
+      sonBolum.hidden=oncekiGoruntulenenler.length===0;
+      oncekiGoruntulenenler.forEach(urunId=>{
+        const urun=urunler[urunId];
+        const baglanti=document.createElement('a');
+        baglanti.className='son-goruntulenen-kart';
+        baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=5';
+        const gorsel=document.createElement('img');
+        gorsel.src=urun.resim;
+        gorsel.alt=urun.ad;
+        if(urunId==='tablo03')gorsel.classList.add('ters-resim');
+        const ad=document.createElement('h3');
+        ad.textContent=urun.ad;
+        const puan=document.createElement('small');
+        puan.textContent=urun.puan&&urun.puan.startsWith('★')?urun.puan:'☆ Değerlendirmeleri gör';
+        const fiyat=document.createElement('strong');
+        fiyat.textContent=para(urun.fiyat);
+        const incele=document.createElement('span');
+        incele.textContent='Ürünü İncele →';
+        baglanti.append(gorsel,ad,puan,fiyat,incele);
+        sonListe.appendChild(baglanti);
+      });
+    }
+    document.getElementById('gecmisiTemizle').addEventListener('click',()=>{
+      oncekiGoruntulenenler=[];
+      localStorage.removeItem(sonGoruntulenenAnahtari);
+      sonGoruntulenenleriCiz();
+      kucukBildirimGoster('Görüntüleme geçmişi temizlendi');
+    });
+    sonGoruntulenenleriCiz();
+    try{localStorage.setItem(sonGoruntulenenAnahtari,JSON.stringify([id,...oncekiGoruntulenenler].slice(0,5)))}catch(e){}
   </script>
   <script type="module" src="yorumlar.js?v=2"></script>
   <script type="module">
