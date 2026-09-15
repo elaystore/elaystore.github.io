@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sık Sorulan Sorular | Elay Filografi</title>
+  <meta name="description" content="Elay Filografi sipariş, hazırlanma süresi, malzeme, kişiye özel tasarım ve teslimat hakkında sık sorulan sorular.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://elaystore.github.io/sss.html">
+  <link rel="stylesheet" href="tema.css?v=25">
+  <script src="analitik.js?v=2" defer></script>
+</head>
+<body class="sss-sayfasi">
+  <header>
+    <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa">
+      <img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu">
+    </a>
+    <nav>
+      <a href="index.html">Ürünler</a>
+      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+      <a id="uyeBaglanti" href="uye.html">👤 Üye Ol / Giriş Yap</a>
+      <details class="profil-menu" id="profilMenu" hidden>
+        <summary>👤 Profilim</summary>
+        <div class="profil-acilir">
+          <strong id="profilAd"></strong>
+          <a href="profil.html">👤 Profilim</a>
+          <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+          <span class="profil-ayirici" aria-hidden="true"></span>
+          <a href="sss.html">? Sık Sorulan Sorular</a>
+          <a href="hakkimizda.html">ⓘ Hakkımızda</a>
+          <a href="iletisim.html">✉ İletişim</a>
+          <span class="profil-ayirici" aria-hidden="true"></span>
+          <button id="cikisBtn" type="button">Çıkış Yap</button>
+        </div>
+      </details>
+      <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
+    </nav>
+  </header>
+
+  <main class="sss-ana">
+    <section class="sss-baslik">
+      <span>YARDIM MERKEZİ</span>
+      <h1>Sık Sorulan Sorular</h1>
+      <p>Siparişiniz ve el emeği filografi çalışmalarımız hakkında merak edilenleri burada bulabilirsiniz.</p>
+    </section>
+
+    <section class="sss-liste" aria-label="Sık sorulan sorular">
+      <details>
+        <summary>Siparişimi nasıl verebilirim?</summary>
+        <div class="sss-cevap"><p>Beğendiğiniz ürünü sepete ekleyip sepet sayfasındaki bilgileri doldurabilirsiniz. Siparişiniz WhatsApp üzerinden bize ulaştığında ayrıntıları birlikte kesinleştiririz.</p></div>
+      </details>
+      <details>
+        <summary>Ürünlerin hazırlanma süresi ne kadar?</summary>
+        <div class="sss-cevap"><p>Hazırlanma süresi; tablonun modeli, ölçüsü, renkleri ve işçilik yoğunluğuna göre değişir. Tahmini süre, sipariş kesinleşmeden önce size bildirilir.</p></div>
+      </details>
+      <details>
+        <summary>Hangi malzemeler kullanılıyor?</summary>
+        <div class="sss-cevap"><p>Kullanılan zemin, çivi ve tel türü tablonun tasarımına göre değişebilir. Bazı eserlerde top başlı, bazılarında düz çivi kullanılır. Ürüne ait malzeme bilgileri ürün sayfasında belirtilir.</p></div>
+      </details>
+      <details>
+        <summary>Kişiye özel çalışma yaptırabilir miyim?</summary>
+        <div class="sss-cevap"><p>Evet. İstediğiniz yazı, motif, ölçü ve renkleri Kişiye Özel Sipariş bölümünden bize iletebilirsiniz. Tasarım ve uygulanabilirlik ayrıntıları üretimden önce görüşülür.</p></div>
+      </details>
+      <details>
+        <summary>Renk ve ölçü seçebilir miyim?</summary>
+        <div class="sss-cevap"><p>Kişiye özel çalışmalarda renk ve ölçü seçenekleri tasarıma göre belirlenebilir. Uygun seçenekler sipariş görüşmesi sırasında size sunulur.</p></div>
+      </details>
+      <details>
+        <summary>Teslimat hakkında nasıl bilgi alabilirim?</summary>
+        <div class="sss-cevap"><p>Teslimat yöntemi ve tahmini teslim süresi, ürünün ölçüsü ve bulunduğunuz yere göre sipariş öncesinde sizinle paylaşılır.</p></div>
+      </details>
+    </section>
+
+    <section class="sss-destek">
+      <h2>Başka bir sorunuz mu var?</h2>
+      <p>Ürünler ve kişiye özel çalışmalar için bizimle iletişime geçebilirsiniz.</p>
+      <a href="iletisim.html">İletişime Geç</a>
+    </section>
+  </main>
+
+  <footer class="ana-footer">
+    <div>
+      <img src="elay-logo.jpeg?v=3" alt="Elay Filografi">
+      <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
+    </div>
+    <nav aria-label="Alt menü">
+      <a href="index.html">Ürünler</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="iletisim.html">İletişim</a>
+    </nav>
+  </footer>
+
+  <script type="module">
+    import { getApp, getApps, initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKpEI_TzDxA38N30BEjMScnl0GnYabl3c",
+      authDomain: "elaystore-c4d53.firebaseapp.com",
+      projectId: "elaystore-c4d53",
+      storageBucket: "elaystore-c4d53.firebasestorage.app",
+      messagingSenderId: "585341292448",
+      appId: "1:585341292448:web:51ace255ab2fcf89b21ec5",
+      measurementId: "G-YMS32EVTTH"
+    };
+
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const uyeBaglanti = document.getElementById("uyeBaglanti");
+    const profilMenu = document.getElementById("profilMenu");
+    const profilAd = document.getElementById("profilAd");
+    const cikisBtn = document.getElementById("cikisBtn");
+    const sepetSayi = document.getElementById("sepetSayi");
+
+    try {
+      const sepet = JSON.parse(localStorage.getItem("sepet") || "[]");
+      sepetSayi.textContent = Array.isArray(sepet) ? sepet.length : 0;
+    } catch (hata) {
+      sepetSayi.textContent = "0";
+    }
+
+    onAuthStateChanged(auth, function (user) {
+      if (user) {
+        uyeBaglanti.hidden = true;
+        profilAd.textContent = user.displayName || user.email?.split("@")[0] || "Elay Üyesi";
+        profilMenu.hidden = false;
+      } else {
+        uyeBaglanti.hidden = false;
+        profilMenu.hidden = true;
+        profilMenu.open = false;
+      }
+    });
+
+    cikisBtn.addEventListener("click", async function () {
+      await signOut(auth);
+      location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
