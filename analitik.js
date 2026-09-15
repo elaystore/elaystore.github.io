@@ -136,6 +136,7 @@
           '<a href="kisiye-ozel.html"><span class="mobil-ikon">✎</span><span>Kişiye Özel Sipariş</span><span class="mobil-ok">›</span></a>' +
           '<a href="profil.html" data-giris="uye"><span class="mobil-ikon">♙</span><span>Profilim</span><span class="mobil-ok">›</span></a>' +
           '<a href="profil.html#favorilerPaneli" data-giris="uye"><span class="mobil-ikon">♡</span><span>Favorilerim</span><span class="mobil-ok">›</span></a>' +
+           '<a href="sss.html"><span class="mobil-ikon">?</span><span>Sık Sorulan Sorular</span><span class="mobil-ok">›</span></a>' +
           '<a href="hakkimizda.html"><span class="mobil-ikon">ⓘ</span><span>Hakkımızda</span><span class="mobil-ok">›</span></a>' +
           '<a href="iletisim.html"><span class="mobil-ikon">✉</span><span>İletişim</span><span class="mobil-ok">›</span></a>' +
           '<a href="uye.html" data-giris="misafir"><span class="mobil-ikon">♙</span><span>Üye Ol / Giriş Yap</span><span class="mobil-ok">›</span></a>' +
