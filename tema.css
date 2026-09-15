@@ -2361,3 +2361,48 @@ body.galeri-acik {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* Ana sayfa ürün rozetleri */
+.urun-rozetler {
+    position: absolute;
+    top: 29px;
+    left: 29px;
+    z-index: 5;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.urun-rozeti {
+    display: inline-flex;
+    align-items: center;
+    min-height: 25px;
+    padding: 5px 9px;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 5px;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(42, 31, 25, .14);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1;
+}
+
+.urun-rozeti-yeni {
+    background: linear-gradient(135deg, #bd152a, #970b1d);
+}
+
+.urun-rozeti-begenilen {
+    color: #332619;
+    background: linear-gradient(135deg, #d9b56d, #c49a4d);
+}
+
+@media (max-width: 600px) {
+    .urun-rozetler {
+        top: 27px;
+        left: 27px;
+    }
+}
