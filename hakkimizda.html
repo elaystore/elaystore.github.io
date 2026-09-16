@@ -3,49 +3,170 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Hakkımızda | Elay Store</title>
-  <meta name="description" content="Elay Store ve Elay Filografi'nin el emeği, geleneksel filografi sanatı ve kişiye özel tasarım anlayışı hakkında bilgi edinin.">
+  <title>Hakkımızda | Elay Filografi</title>
+  <meta name="description" content="Elay Filografi'nin el emeği, geleneksel filografi sanatı ve kişiye özel tasarım yolculuğunu keşfedin.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://elaystore.github.io/hakkimizda.html">
+  <link rel="stylesheet" href="tema.css?v=25">
+  <script src="analitik.js?v=2" defer></script>
   <style>
-    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f3f1;color:#2d241f;line-height:1.7}
-    header{background:linear-gradient(135deg,#6f4428,#9c704e);color:#fff;padding:22px 6%;display:flex;justify-content:space-between;align-items:center}
-    header h1{margin:0;font-size:27px}nav a{color:#fff;text-decoration:none;margin-left:18px;font-weight:700}
-    main{max-width:980px;margin:42px auto;padding:0 20px}.hero{background:#fff;border-radius:20px;padding:45px;box-shadow:0 6px 24px #00000010;border-top:5px solid #9c704e}
-    .etiket{display:inline-block;background:#f1e5da;color:#6f4428;padding:7px 12px;border-radius:20px;font-weight:700;font-size:14px}
-    h2{font-size:36px;margin:18px 0 10px;color:#6f4428}.vurgu{font-size:20px;color:#5f5047}
-    .degerler{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}.kart{background:#faf7f2;border-radius:14px;padding:22px}.kart h3{color:#7b4d31;margin-top:0}
-    footer{text-align:center;color:#786b63;padding:30px 20px}
-    @media(max-width:700px){header{display:block}nav{margin-top:14px}nav a{display:inline-block;margin:6px 12px 6px 0}.hero{padding:28px 22px}h2{font-size:30px}.degerler{grid-template-columns:1fr}}
+    .hakkimizda-sayfasi{min-height:100vh;background:#f7f3ef;color:#24211f}
+    .hakkimizda-ana{width:min(1080px,calc(100% - 40px));margin:0 auto;padding:52px 0 64px}
+    .hakkimizda-hero{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(290px,.82fr);gap:58px;align-items:center;padding-bottom:50px;border-bottom:1px solid #ded3cb}
+    .hakkimizda-etiket{display:block;margin-bottom:13px;color:#a81022;font-size:12px;font-weight:750;letter-spacing:.18em}
+    .hakkimizda-metin h1{margin:0 0 18px;color:#1c1a18;font-size:clamp(37px,5vw,55px);font-weight:750;letter-spacing:-.045em;line-height:1.08}
+    .hakkimizda-vurgu{margin:0 0 16px;color:#2c2825;font-size:18px;line-height:1.65}
+    .hakkimizda-metin p:last-child{margin:0;color:#706862;line-height:1.75}
+    .hakkimizda-yolculuk{padding:8px 0 8px 29px;border-left:2px solid #ddd1c8}
+    .hakkimizda-yolculuk h2{margin:0 0 24px;color:#26221f;font-size:25px}
+    .hakkimizda-yil{position:relative;display:grid;grid-template-columns:65px 1fr;gap:13px;margin-bottom:24px}
+    .hakkimizda-yil:last-child{margin-bottom:0}
+    .hakkimizda-yil::before{position:absolute;top:5px;left:-36px;width:12px;height:12px;border-radius:50%;background:#aa1023;box-shadow:0 0 0 5px #f7f3ef;content:""}
+    .hakkimizda-yil strong{color:#aa1023;font-weight:750}
+    .hakkimizda-yil p{margin:0;color:#706862;line-height:1.55}
+    .hakkimizda-degerler{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding-top:40px}
+    .hakkimizda-deger{padding:8px 30px;border-left:1px solid #ded3cb}
+    .hakkimizda-deger:first-child{padding-left:0;border-left:0}
+    .hakkimizda-deger:last-child{padding-right:0}
+    .hakkimizda-simge{display:grid;width:42px;height:42px;margin-bottom:15px;border-radius:50%;place-items:center;color:#a81022;background:#f0e2de;font-size:20px;font-weight:750}
+    .hakkimizda-deger h2{margin:0 0 9px;color:#272320;font-size:21px}
+    .hakkimizda-deger p{margin:0;color:#706862;line-height:1.65}
+    .hakkimizda-soz{margin:40px 0 0;padding:23px 27px;border-left:4px solid #aa1023;color:#665e58;background:#eee6df;font-size:16px;line-height:1.7}
+    @media(max-width:800px){.hakkimizda-hero{grid-template-columns:1fr;gap:32px}.hakkimizda-yolculuk{margin-left:8px}.hakkimizda-degerler{grid-template-columns:1fr;gap:22px}.hakkimizda-deger,.hakkimizda-deger:first-child,.hakkimizda-deger:last-child{padding:0 0 22px;border-left:0;border-bottom:1px solid #ded3cb}}
+    @media(max-width:600px){.hakkimizda-ana{width:calc(100% - 24px);padding:30px 0 44px}.hakkimizda-hero{padding-bottom:34px}.hakkimizda-metin h1{font-size:37px}.hakkimizda-vurgu{font-size:16px}.hakkimizda-yolculuk h2{font-size:22px}.hakkimizda-yil{grid-template-columns:58px 1fr;gap:9px}}
   </style>
-  <link rel="stylesheet" href="tema.css?v=7">
-  <script src="analitik.js?v=1" defer></script>
 </head>
-<body>
+<body class="hakkimizda-sayfasi">
   <header>
-    <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa"><img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu"></a>
+    <a class="marka" href="index.html" aria-label="Elay Filografi ana sayfa">
+      <img class="site-logo" src="elay-logo.jpeg?v=3" alt="Elay Filografi logosu">
+    </a>
     <nav>
       <a href="index.html">Ürünler</a>
-      <a href="hakkimizda.html">Hakkımızda</a>
-      <a href="iletisim.html">İletişim</a>
       <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
-      <a href="sepet.html">🛒 Sepet</a>
+      <a id="uyeBaglanti" href="uye.html">👤 Üye Ol / Giriş Yap</a>
+      <details class="profil-menu" id="profilMenu" hidden>
+        <summary>👤 Profilim</summary>
+        <div class="profil-acilir">
+          <strong id="profilAd"></strong>
+          <a href="profil.html">👤 Profilim</a>
+          <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+          <span class="profil-ayirici" aria-hidden="true"></span>
+          <a href="sss.html">? Sık Sorulan Sorular</a>
+          <a href="hakkimizda.html">ⓘ Hakkımızda</a>
+          <a href="iletisim.html">✉ İletişim</a>
+          <span class="profil-ayirici" aria-hidden="true"></span>
+          <button id="cikisBtn" type="button">Çıkış Yap</button>
+        </div>
+      </details>
+      <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
     </nav>
   </header>
-  <main>
-    <section class="hero">
-      <span class="etiket">El emeği • Geleneksel sanat • Özgün tasarım</span>
-      <h2>Hakkımızda</h2>
-      <p class="vurgu">Elay Filografi, çivi ve telin sabırla buluştuğu filografi sanatını yaşatmak ve yeni nesillere ulaştırmak amacıyla kurulmuştur.</p>
-      <p>Her eserimiz; tasarımından çivi uygulamasına, tel örme aşamasından son dokunuşlarına kadar özenle hazırlanır. Geleneksel filografi tekniklerini korurken farklı renk, motif ve ölçülerle özgün çalışmalar üretmeye önem veriyoruz.</p>
-      <p>Hazır eserlerimizin yanında, özel günler ve yaşam alanları için kişiye özel siparişler de hazırlıyoruz. Amacımız yalnızca bir ürün sunmak değil; el emeğinin değerini taşıyan, uzun yıllar saklanabilecek anlamlı eserler ortaya koymaktır.</p>
-      <div class="degerler">
-        <article class="kart"><h3>El Emeği</h3><p>Her eser dikkat, sabır ve titiz işçilikle tek tek hazırlanır.</p></article>
-        <article class="kart"><h3>Gelenekten Geleceğe</h3><p>Filografi sanatının köklü tekniğini çağdaş tasarımlarla buluştururuz.</p></article>
-        <article class="kart"><h3>Kişiye Özel</h3><p>İsteklerinize uygun renk, ölçü ve motif seçenekleriyle çalışırız.</p></article>
+
+  <main class="hakkimizda-ana">
+    <section class="hakkimizda-hero">
+      <div class="hakkimizda-metin">
+        <span class="hakkimizda-etiket">GELENEKTEN GELECEĞE</span>
+        <h1>Çivi ve telin sabırla sanata dönüştüğü yer</h1>
+        <p class="hakkimizda-vurgu">Elay Filografi, geleneksel filografi sanatını yaşatmak ve özgün tasarımlarla yeni nesillere ulaştırmak amacıyla kurulmuştur.</p>
+        <p>Her eser; tasarımından çivi uygulamasına, tel örme aşamasından son dokunuşlarına kadar özenle ve el emeğiyle hazırlanır.</p>
       </div>
+
+      <aside class="hakkimizda-yolculuk" aria-label="Elay Filografi yolculuğu">
+        <h2>Bir ustalık yolculuğu</h2>
+        <div class="hakkimizda-yil">
+          <strong>2014</strong>
+          <p>Filografi sanatına kursiyer olarak ilk adım.</p>
+        </div>
+        <div class="hakkimizda-yil">
+          <strong>2017</strong>
+          <p>Bilgiyi paylaşmaya ve öğrenci yetiştirmeye başlangıç.</p>
+        </div>
+        <div class="hakkimizda-yil">
+          <strong>Bugün</strong>
+          <p>Elay Filografi ile geleneksel sanatı özgün eserlerle geleceğe taşıma.</p>
+        </div>
+      </aside>
     </section>
+
+    <section class="hakkimizda-degerler" aria-label="Değerlerimiz">
+      <article class="hakkimizda-deger">
+        <span class="hakkimizda-simge" aria-hidden="true">♡</span>
+        <h2>El Emeği</h2>
+        <p>Her çalışma dikkat, sabır ve titiz işçilikle tek tek hazırlanır.</p>
+      </article>
+      <article class="hakkimizda-deger">
+        <span class="hakkimizda-simge" aria-hidden="true">◇</span>
+        <h2>Geleneksel Sanat</h2>
+        <p>Filografinin köklü tekniğini koruyarak geleceğe taşırız.</p>
+      </article>
+      <article class="hakkimizda-deger">
+        <span class="hakkimizda-simge" aria-hidden="true">✦</span>
+        <h2>Kişiye Özel</h2>
+        <p>İsteklerinize uygun renk, ölçü ve motif seçenekleriyle çalışırız.</p>
+      </article>
+    </section>
+
+    <p class="hakkimizda-soz">Amacımız yalnızca bir ürün sunmak değil; el emeğinin değerini taşıyan, uzun yıllar saklanabilecek anlamlı eserler ortaya koymaktır.</p>
   </main>
-  <footer>© Elay Filografi • El emeğiyle hazırlanmıştır</footer>
+
+  <footer class="ana-footer">
+    <div>
+      <img src="elay-logo.jpeg?v=3" alt="Elay Filografi">
+      <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
+    </div>
+    <nav aria-label="Alt menü">
+      <a href="sss.html">Sık Sorulan Sorular</a>
+      <a href="iletisim.html">İletişim</a>
+      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+    </nav>
+  </footer>
+
+  <script type="module">
+    import { getApp, getApps, initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKpEI_TzDxA38N30BEjMScnl0GnYabl3c",
+      authDomain: "elaystore-c4d53.firebaseapp.com",
+      projectId: "elaystore-c4d53",
+      storageBucket: "elaystore-c4d53.firebasestorage.app",
+      messagingSenderId: "585341292448",
+      appId: "1:585341292448:web:51ace255ab2fcf89b21ec5",
+      measurementId: "G-YMS32EVTTH"
+    };
+
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const uyeBaglanti = document.getElementById("uyeBaglanti");
+    const profilMenu = document.getElementById("profilMenu");
+    const profilAd = document.getElementById("profilAd");
+    const cikisBtn = document.getElementById("cikisBtn");
+    const sepetSayi = document.getElementById("sepetSayi");
+
+    try {
+      const sepet = JSON.parse(localStorage.getItem("sepet") || "[]");
+      sepetSayi.textContent = Array.isArray(sepet) ? sepet.length : 0;
+    } catch (hata) {
+      sepetSayi.textContent = "0";
+    }
+
+    onAuthStateChanged(auth, function (user) {
+      if (user) {
+        uyeBaglanti.hidden = true;
+        profilAd.textContent = user.displayName || user.email?.split("@")[0] || "Elay Üyesi";
+        profilMenu.hidden = false;
+      } else {
+        uyeBaglanti.hidden = false;
+        profilMenu.hidden = true;
+        profilMenu.open = false;
+      }
+    });
+
+    cikisBtn.addEventListener("click", async function () {
+      await signOut(auth);
+      location.href = "index.html";
+    });
+  </script>
 </body>
 </html>
