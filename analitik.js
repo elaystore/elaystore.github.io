@@ -181,3 +181,190 @@
     }
     if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",baslat);else baslat();
 })();
+
+(function () {
+    function elayTicaretTakibiniBaslat() {
+        const izinAnahtari = "elay_analitik_izni";
+
+        function izinVarMi() {
+            try {
+                return localStorage.getItem(izinAnahtari) === "kabul";
+            } catch (hata) {
+                return false;
+            }
+        }
+
+        function olayGonder(olayAdi, bilgiler) {
+            if (!izinVarMi() || typeof window.gtag !== "function") return;
+            window.gtag("event", olayAdi, Object.assign({
+                transport_type: "beacon"
+            }, bilgiler || {}));
+        }
+
+        window.elayAnalitikOlay = olayGonder;
+
+        function fiyatSayiya(metin) {
+            const rakamlar = String(metin || "").replace(/[^0-9]/g, "");
+            return rakamlar ? Number(rakamlar) : 0;
+        }
+
+        function guvenliKimlik(deger) {
+            return String(deger || "urun")
+                .toLocaleLowerCase("tr-TR")
+                .replace(/[^a-z0-9çğıöşü]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+        }
+
+        function karttanUrun(kart) {
+            if (!kart) return null;
+            const tiklama = kart.getAttribute("onclick") || "";
+            const eslesme = tiklama.match(/urunDetay\(['"]([^'"]+)['"]\)/);
+            const ad = kart.querySelector("h2")?.textContent?.trim() || "Elay Filografi Ürünü";
+            const fiyat = fiyatSayiya(kart.querySelector(".fiyat")?.textContent);
+            return {
+                id: eslesme?.[1] || guvenliKimlik(ad),
+                ad: ad,
+                fiyat: fiyat
+            };
+        }
+
+        function detaydanUrun() {
+            const ad = document.getElementById("ad")?.textContent?.trim();
+            if (!ad) return null;
+            return {
+                id: new URLSearchParams(location.search).get("urun") || guvenliKimlik(ad),
+                ad: ad,
+                fiyat: fiyatSayiya(document.getElementById("fiyat")?.textContent)
+            };
+        }
+
+        function urunParametreleri(urun) {
+            if (!urun) return {};
+            return {
+                currency: "TRY",
+                value: urun.fiyat || 0,
+                items: [{
+                    item_id: urun.id,
+                    item_name: urun.ad,
+                    price: urun.fiyat || 0,
+                    quantity: 1
+                }]
+            };
+        }
+
+        function sepetUrunleri() {
+            try {
+                const sepet = JSON.parse(localStorage.getItem("sepet") || "[]");
+                if (!Array.isArray(sepet)) return [];
+                return sepet.map(function (urun, sira) {
+                    const fiyat = Number(urun.fiyat) || 0;
+                    return {
+                        item_id: urun.id || urun.resim || guvenliKimlik(urun.ad) || ("urun-" + (sira + 1)),
+                        item_name: urun.ad || "Elay Filografi Ürünü",
+                        price: fiyat,
+                        quantity: 1
+                    };
+                });
+            } catch (hata) {
+                return [];
+            }
+        }
+
+        function sepetParametreleri() {
+            const items = sepetUrunleri();
+            return {
+                currency: "TRY",
+                value: items.reduce(function (toplam, urun) {
+                    return toplam + (Number(urun.price) || 0) * (Number(urun.quantity) || 1);
+                }, 0),
+                items: items
+            };
+        }
+
+        const sayfa = location.pathname.split("/").pop() || "index.html";
+
+        if (sayfa === "urun.html") {
+            const urun = detaydanUrun();
+            if (urun) olayGonder("view_item", urunParametreleri(urun));
+        }
+
+        if (sayfa === "sepet.html") {
+            const sepetBilgisi = sepetParametreleri();
+            if (sepetBilgisi.items.length) olayGonder("view_cart", sepetBilgisi);
+        }
+
+        document.addEventListener("click", function (event) {
+            const hedef = event.target.closest("a,button,.urun");
+            if (!hedef) return;
+
+            const sepetButonu = event.target.closest(".sepet-btn,.detay-sepet");
+            if (sepetButonu) {
+                const urun = sepetButonu.classList.contains("detay-sepet")
+                    ? detaydanUrun()
+                    : karttanUrun(sepetButonu.closest(".urun"));
+                if (urun) olayGonder("add_to_cart", urunParametreleri(urun));
+                return;
+            }
+
+            const whatsapp = event.target.closest('a[href*="wa.me"]');
+            if (whatsapp) {
+                const urun = detaydanUrun();
+                olayGonder("whatsapp_siparis", {
+                    sayfa: sayfa,
+                    urun_id: urun?.id || "",
+                    urun_adi: urun?.ad || "",
+                    value: urun?.fiyat || 0,
+                    currency: "TRY"
+                });
+                return;
+            }
+
+            const urunKarti = event.target.closest(".urun");
+            if (urunKarti && !event.target.closest("button,a")) {
+                const urun = karttanUrun(urunKarti);
+                if (urun) {
+                    const bilgiler = urunParametreleri(urun);
+                    bilgiler.item_list_name = "Ürünler";
+                    olayGonder("select_item", bilgiler);
+                }
+            }
+        });
+
+        const siparisFormu = document.getElementById("siparisFormu");
+        if (siparisFormu) {
+            siparisFormu.addEventListener("submit", function () {
+                const bilgiler = sepetParametreleri();
+                if (!siparisFormu.checkValidity() || !bilgiler.items.length) return;
+                olayGonder("begin_checkout", bilgiler);
+                olayGonder("whatsapp_siparis", {
+                    sayfa: "sepet",
+                    urun_sayisi: bilgiler.items.length,
+                    value: bilgiler.value,
+                    currency: "TRY"
+                });
+            });
+        }
+
+        const ozelSiparisFormu = document.getElementById("ozelSiparisFormu");
+        if (ozelSiparisFormu) {
+            ozelSiparisFormu.addEventListener("submit", function () {
+                if (!ozelSiparisFormu.checkValidity()) return;
+                olayGonder("whatsapp_siparis", {
+                    sayfa: "kisiye_ozel",
+                    urun_adi: "Kişiye Özel Filografi"
+                });
+                olayGonder("generate_lead", {
+                    lead_source: "whatsapp",
+                    lead_type: "kisiye_ozel"
+                });
+            });
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", elayTicaretTakibiniBaslat);
+    } else {
+        elayTicaretTakibiniBaslat();
+    }
+})();
+
