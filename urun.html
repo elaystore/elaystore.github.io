@@ -5,8 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ürün Detayı | Elay Store</title>
   <meta name="description" content="Elay Store el emeği filografi ürün detayları, değerlendirmeler ve benzer tablolar.">
-  <link rel="stylesheet" href="tema.css?v=27">
-  <script src="analitik.js?v=3" defer></script>
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link id="canonicalUrl" rel="canonical" href="https://elaystore.github.io/urun.html">
+  <meta property="og:type" content="product">
+  <meta property="og:site_name" content="Elay Store">
+  <meta id="ogTitle" property="og:title" content="Ürün Detayı | Elay Store">
+  <meta id="ogDescription" property="og:description" content="Elay Store el emeği filografi ürün detayları.">
+  <meta id="ogUrl" property="og:url" content="https://elaystore.github.io/urun.html">
+  <meta id="ogImage" property="og:image" content="https://elaystore.github.io/elay-logo.jpeg">
+  <link rel="stylesheet" href="tema.css?v=23">
+  <script src="analitik.js?v=1" defer></script>
 </head>
 <body class="urun-detay-body">
   <header>
@@ -21,14 +29,10 @@
         <summary>👤 Profilim</summary>
         <div class="profil-acilir">
           <strong id="profilAd"></strong>
-        <a href="profil.html">👤 Profilim</a>
-        <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
-        <span class="profil-ayirici" aria-hidden="true"></span>
-        <a href="sss.html">? Sık Sorulan Sorular</a>
-        <a href="hakkimizda.html">ⓘ Hakkımızda</a>
-        <a href="iletisim.html">✉ İletişim</a>
-        <span class="profil-ayirici" aria-hidden="true"></span>
-        <button id="cikisBtn" type="button">Çıkış Yap</button>
+          <a href="hakkimizda.html">Hakkımızda</a>
+          <a href="iletisim.html">İletişim</a>
+          <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+          <button id="cikisBtn" type="button">Çıkış Yap</button>
         </div>
       </details>
       <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
@@ -121,14 +125,6 @@
       </div>
       <div id="benzerListe" class="benzer-liste"></div>
     </section>
-
-    <section class="son-goruntulenen" id="sonGoruntulenenBolumu" aria-labelledby="sonGoruntulenenBaslik" hidden>
-      <div class="son-goruntulenen-ust">
-        <h2 id="sonGoruntulenenBaslik">Son Görüntülediğiniz Ürünler</h2>
-        <button id="gecmisiTemizle" type="button">Geçmişi Temizle</button>
-      </div>
-      <div id="sonGoruntulenenListe" class="son-goruntulenen-liste"></div>
-    </section>
   </main>
 
   <div id="galeriModal" class="galeri-modal" hidden role="dialog" aria-modal="true" aria-label="Büyütülmüş ürün fotoğrafı">
@@ -136,17 +132,14 @@
     <img id="galeriBuyuk" alt="">
   </div>
 
-    <footer class="ana-footer">
+  <footer class="ana-footer">
+    <strong>ELAY FİLOGRAFİ</strong>
     <div>
-      <img src="elay-logo.jpeg?v=3" alt="Elay Filografi">
-      <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
-    </div>
-    <nav aria-label="Alt menü">
-      <a href="sss.html">Sık Sorulan Sorular</a>
       <a href="hakkimizda.html">Hakkımızda</a>
       <a href="iletisim.html">İletişim</a>
       <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
-    </nav>
+      <a href="guvenli-alisveris.html">Güvenli Alışveriş</a>
+    </div>
   </footer>
 
   <script>
@@ -191,21 +184,49 @@
       tablo13:['besmele-renkli-01.webp'],
       tablo14:['turk-bayragi-01.webp','turk-bayragi-02.webp','turk-bayragi-03.webp','turk-bayragi-04.webp']
     };
-    const id=new URLSearchParams(location.search).get('urun')||'mouse';
-    const p=urunler[id]||urunler.mouse;
-
-    const sonGoruntulenenAnahtari='elay_son_goruntulenenler';
-    let oncekiGoruntulenenler=[];
-    try{
-      oncekiGoruntulenenler=JSON.parse(localStorage.getItem(sonGoruntulenenAnahtari)||'[]');
-      if(!Array.isArray(oncekiGoruntulenenler))oncekiGoruntulenenler=[];
-    }catch(e){oncekiGoruntulenenler=[]}
-    oncekiGoruntulenenler=oncekiGoruntulenenler.filter(urunId=>urunler[urunId]&&urunId!==id).slice(0,4);
+    const istenenId=new URLSearchParams(location.search).get('urun')||'mouse';
+    const id=Object.prototype.hasOwnProperty.call(urunler,istenenId)?istenenId:'mouse';
+    const p=urunler[id];
     if(!p.puan)p.puan='☆ Henüz değerlendirme yok';
     if(!p.stok)p.stok='● Stokta Var';
     if(!p.oz)p.oz=[...ortakOzellikler];
     if(id.startsWith('tablo'))p.oz.push(tabloHazirlanma);
     const para=(deger)=>deger.toLocaleString('tr-TR')+' TL';
+    const urunUrl='https://elaystore.github.io/urun.html?urun='+encodeURIComponent(id);
+    const urunGorseli=new URL(p.resim,'https://elaystore.github.io/').href;
+    const urunAciklamasi=p.ad+', Elay Filografi tarafından el emeğiyle hazırlanan özgün bir '+(id.startsWith('tablo')?'filografi tablosudur.':'el işi üründür.');
+    document.title=p.ad+' | Elay Store';
+    document.querySelector('meta[name="description"]').content=urunAciklamasi+' Fiyat, ürün özellikleri ve sipariş bilgilerini inceleyin.';
+    document.getElementById('canonicalUrl').href=urunUrl;
+    document.getElementById('ogTitle').content=p.ad+' | Elay Store';
+    document.getElementById('ogDescription').content=urunAciklamasi;
+    document.getElementById('ogUrl').content=urunUrl;
+    document.getElementById('ogImage').content=urunGorseli;
+
+    const urunYapilandirilmisVerisi=document.createElement('script');
+    urunYapilandirilmisVerisi.type='application/ld+json';
+    urunYapilandirilmisVerisi.textContent=JSON.stringify({
+      '@context':'https://schema.org',
+      '@type':'Product',
+      '@id':urunUrl+'#product',
+      name:p.ad,
+      description:urunAciklamasi,
+      image:(galeriDosyalari[id]||[p.resim]).map(dosya=>new URL(dosya,'https://elaystore.github.io/').href),
+      sku:id,
+      category:id.startsWith('tablo')?'El Yapımı Filografi Tablosu':'El İşi Bileklik',
+      brand:{'@type':'Brand',name:'Elay Filografi'},
+      url:urunUrl,
+      offers:{
+        '@type':'Offer',
+        url:urunUrl,
+        priceCurrency:'TRY',
+        price:String(p.fiyat),
+        availability:'https://schema.org/InStock',
+        itemCondition:'https://schema.org/NewCondition',
+        seller:{'@type':'Organization',name:'Elay Filografi',url:'https://elaystore.github.io/'}
+      }
+    });
+    document.head.appendChild(urunYapilandirilmisVerisi);
     const resim=document.getElementById('resim');
     document.getElementById('ad').textContent=p.ad;
     document.getElementById('izAd').textContent=p.ad;
@@ -281,8 +302,6 @@
     galeriModal.addEventListener('click',olay=>{if(olay.target===galeriModal)galeriKapatIslemi()});
     document.addEventListener('keydown',olay=>{if(olay.key==='Escape'&&!galeriModal.hidden)galeriKapatIslemi()});
 
-    document.title=p.ad+' | Elay Store';
-    document.querySelector('meta[name="description"]').content=p.ad+' ürün bilgileri, müşteri değerlendirmeleri ve benzer Elay Store ürünleri.';
     document.getElementById('whatsappSiparis').href='https://wa.me/905072431779?text='+encodeURIComponent('Merhaba, '+p.ad+' hakkında bilgi almak ve sipariş vermek istiyorum.');
 
     function sepetSayisiniGuncelle(){
@@ -316,10 +335,9 @@
     }
     sepetSayisiniGuncelle();
 
+    const detayFavori=document.getElementById('detayFavori');
     let aktifKullaniciId=null;
     let favoriler=[];
-    const detayFavori=document.getElementById('detayFavori');
-    function favoriAnahtari(){return aktifKullaniciId?'elay_favoriler_'+aktifKullaniciId:null}
     function detayFavoriyiGuncelle(){
       const favoride=favoriler.includes(id);
       detayFavori.classList.toggle('aktif',favoride);
@@ -327,19 +345,19 @@
       detayFavori.textContent=favoride?'♥ Favorilerden Çıkar':'♡ Favorilere Ekle';
     }
     window.favorileriEtkinlestir=function(kullaniciId){
-      aktifKullaniciId=kullaniciId||null;
-      favoriler=[];
-      if(aktifKullaniciId){
-        try{favoriler=JSON.parse(localStorage.getItem(favoriAnahtari())||'[]');if(!Array.isArray(favoriler))favoriler=[]}catch(e){favoriler=[]}
-      }
-      detayFavori.hidden=!aktifKullaniciId;
+      aktifKullaniciId=kullaniciId;
+      detayFavori.hidden=!kullaniciId;
+      try{
+        const kayit=JSON.parse(localStorage.getItem('elay_favoriler_'+kullaniciId)||'[]');
+        favoriler=kullaniciId&&Array.isArray(kayit)?kayit:[];
+      }catch(e){favoriler=[]}
       detayFavoriyiGuncelle();
     };
     detayFavori.addEventListener('click',()=>{
       if(!aktifKullaniciId)return;
       const favoride=favoriler.includes(id);
       favoriler=favoride?favoriler.filter(urunId=>urunId!==id):[...favoriler,id];
-      localStorage.setItem(favoriAnahtari(),JSON.stringify(favoriler));
+      localStorage.setItem('elay_favoriler_'+aktifKullaniciId,JSON.stringify(favoriler));
       detayFavoriyiGuncelle();
       kucukBildirimGoster(favoride?'♡ Favorilerden çıkarıldı':'♥ Favorilere eklendi');
     });
@@ -382,7 +400,7 @@
       const urun=urunler[urunId];
       const baglanti=document.createElement('a');
       baglanti.className='benzer-kart';
-      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=4';
+      baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=5';
       const gorsel=document.createElement('img');
       gorsel.src=urun.resim;
       gorsel.alt=urun.ad;
@@ -396,41 +414,6 @@
       baglanti.append(gorsel,ad,fiyat,incele);
       benzerListe.appendChild(baglanti);
     });
-
-    const sonBolum=document.getElementById('sonGoruntulenenBolumu');
-    const sonListe=document.getElementById('sonGoruntulenenListe');
-    function sonGoruntulenenleriCiz(){
-      sonListe.replaceChildren();
-      sonBolum.hidden=oncekiGoruntulenenler.length===0;
-      oncekiGoruntulenenler.forEach(urunId=>{
-        const urun=urunler[urunId];
-        const baglanti=document.createElement('a');
-        baglanti.className='son-goruntulenen-kart';
-        baglanti.href='urun.html?urun='+encodeURIComponent(urunId)+'&v=5';
-        const gorsel=document.createElement('img');
-        gorsel.src=urun.resim;
-        gorsel.alt=urun.ad;
-        if(urunId==='tablo03')gorsel.classList.add('ters-resim');
-        const ad=document.createElement('h3');
-        ad.textContent=urun.ad;
-        const puan=document.createElement('small');
-        puan.textContent=urun.puan&&urun.puan.startsWith('★')?urun.puan:'☆ Değerlendirmeleri gör';
-        const fiyat=document.createElement('strong');
-        fiyat.textContent=para(urun.fiyat);
-        const incele=document.createElement('span');
-        incele.textContent='Ürünü İncele →';
-        baglanti.append(gorsel,ad,puan,fiyat,incele);
-        sonListe.appendChild(baglanti);
-      });
-    }
-    document.getElementById('gecmisiTemizle').addEventListener('click',()=>{
-      oncekiGoruntulenenler=[];
-      localStorage.removeItem(sonGoruntulenenAnahtari);
-      sonGoruntulenenleriCiz();
-      kucukBildirimGoster('Görüntüleme geçmişi temizlendi');
-    });
-    sonGoruntulenenleriCiz();
-    try{localStorage.setItem(sonGoruntulenenAnahtari,JSON.stringify([id,...oncekiGoruntulenenler].slice(0,5)))}catch(e){}
   </script>
   <script type="module" src="yorumlar.js?v=2"></script>
   <script type="module">
@@ -440,14 +423,14 @@
     const app=getApps().length?getApp():initializeApp(firebaseConfig);
     const auth=getAuth(app);
     const uyeBaglanti=document.getElementById('uyeBaglanti');
+    const cikisBtn=document.getElementById('cikisBtn');
     const profilMenu=document.getElementById('profilMenu');
     const profilAd=document.getElementById('profilAd');
-    const cikisBtn=document.getElementById('cikisBtn');
     onAuthStateChanged(auth,kullanici=>{
       if(kullanici){
         uyeBaglanti.hidden=true;
-        profilAd.textContent=kullanici.displayName||kullanici.email?.split('@')[0]||'Hesabım';
         profilMenu.hidden=false;
+        profilAd.textContent='Hoş geldiniz, '+(kullanici.displayName||kullanici.email?.split('@')[0]||'Üyemiz');
         window.favorileriEtkinlestir(kullanici.uid);
       }else{
         uyeBaglanti.hidden=false;

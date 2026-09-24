@@ -11,10 +11,25 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Elay Store",
-    "alternateName": "Elay Filografi",
-    "url": "https://elaystore.github.io/"
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://elaystore.github.io/#organization",
+        "name": "Elay Filografi",
+        "alternateName": "Elay Store",
+        "url": "https://elaystore.github.io/",
+        "logo": "https://elaystore.github.io/elay-logo.jpeg"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://elaystore.github.io/#website",
+        "name": "Elay Store",
+        "alternateName": "Elay Filografi",
+        "url": "https://elaystore.github.io/",
+        "publisher": {"@id": "https://elaystore.github.io/#organization"},
+        "inLanguage": "tr-TR"
+      }
+    ]
   }
   </script>
   <style>
@@ -168,8 +183,8 @@ header a {
     }
 }
   </style>
-  <link rel="stylesheet" href="tema.css?v=27"/>
-  <script src="analitik.js?v=3" defer></script>
+  <link rel="stylesheet" href="tema.css?v=23"/>
+  <script src="analitik.js?v=1" defer></script>
  </head>
  <body>
   <header>
@@ -193,13 +208,9 @@ header a {
       <summary>👤 Profilim</summary>
       <div class="profil-acilir">
         <strong id="profilAd"></strong>
-        <a href="profil.html">👤 Profilim</a>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="iletisim.html">İletişim</a>
         <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
-        <span class="profil-ayirici" aria-hidden="true"></span>
-        <a href="sss.html">? Sık Sorulan Sorular</a>
-        <a href="hakkimizda.html">ⓘ Hakkımızda</a>
-        <a href="iletisim.html">✉ İletişim</a>
-        <span class="profil-ayirici" aria-hidden="true"></span>
         <button id="cikisBtn" type="button">Çıkış Yap</button>
       </div>
     </details>
@@ -428,17 +439,17 @@ header a {
    </div>
 
 	  </div>
-    <footer class="ana-footer">
-    <div>
-      <img src="elay-logo.jpeg?v=3" alt="Elay Filografi">
-      <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
-    </div>
-    <nav aria-label="Alt menü">
-      <a href="sss.html">Sık Sorulan Sorular</a>
-      <a href="hakkimizda.html">Hakkımızda</a>
-      <a href="iletisim.html">İletişim</a>
-      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
-    </nav>
+  <footer class="ana-footer">
+   <div>
+    <img src="elay-logo.jpeg?v=3" alt="Elay Filografi"/>
+    <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
+   </div>
+   <nav aria-label="Alt menü">
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="iletisim.html">İletişim</a>
+    <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
+    <a href="guvenli-alisveris.html">Güvenli Alışveriş</a>
+   </nav>
   </footer>
 	  <script>
 let sepet = [];
@@ -473,24 +484,6 @@ let sadeceFavoriler = false;
 let aktifKullaniciId = null;
 let favoriler = [];
 
-function favoriDepolamaAnahtari() {
-    return aktifKullaniciId ? 'elay_favoriler_' + aktifKullaniciId : null;
-}
-
-function favorileriYukle() {
-    const anahtar = favoriDepolamaAnahtari();
-    if (!anahtar) {
-        favoriler = [];
-        return;
-    }
-    try {
-        favoriler = JSON.parse(localStorage.getItem(anahtar) || '[]');
-        if (!Array.isArray(favoriler)) favoriler = [];
-    } catch (hata) {
-        favoriler = [];
-    }
-}
-
 const altBildirim = document.createElement('div');
 altBildirim.className = 'alt-bildirim';
 altBildirim.setAttribute('role', 'status');
@@ -509,9 +502,18 @@ function kucukBildirimGoster(mesaj) {
     }, 2200);
 }
 
+function favorileriOku(kullaniciId) {
+    try {
+        const kayit = JSON.parse(localStorage.getItem('elay_favoriler_' + kullaniciId) || '[]');
+        return Array.isArray(kayit) ? kayit : [];
+    } catch (hata) {
+        return [];
+    }
+}
+
 function favorileriKaydet() {
-    const anahtar = favoriDepolamaAnahtari();
-    if (anahtar) localStorage.setItem(anahtar, JSON.stringify(favoriler));
+    if (!aktifKullaniciId) return;
+    localStorage.setItem('elay_favoriler_' + aktifKullaniciId, JSON.stringify(favoriler));
 }
 
 function favoriButonunuGuncelle(buton, urunId) {
@@ -553,10 +555,23 @@ urunKartlari.forEach(function (urun, sira) {
         favoriButonu.addEventListener('click', function (olay) {
             favoriDegistir(olay, urunId);
         });
-        favoriButonunuGuncelle(favoriButonu, urunId);
         urun.appendChild(favoriButonu);
     }
 });
+
+window.favorileriEtkinlestir = function (kullaniciId) {
+    aktifKullaniciId = kullaniciId;
+    favoriler = kullaniciId ? favorileriOku(kullaniciId) : [];
+    document.querySelectorAll('.favori-btn').forEach(function (buton) {
+        buton.hidden = !kullaniciId;
+        favoriButonunuGuncelle(buton, buton.dataset.urunId);
+    });
+    if (!kullaniciId && sadeceFavoriler) {
+        sadeceFavoriler = false;
+        seciliKategori = 'hepsi';
+    }
+    filtreleVeSirala();
+};
 
 function metniSadelestir(metin) {
     return String(metin || '')
@@ -622,17 +637,6 @@ function kategoriGoster(kategori, buton) {
     filtreleVeSirala();
 }
 
-window.favorileriEtkinlestir = function (kullaniciId) {
-    aktifKullaniciId = kullaniciId || null;
-    sadeceFavoriler = false;
-    favorileriYukle();
-    document.querySelectorAll('.favori-btn').forEach(function (buton) {
-        buton.hidden = !aktifKullaniciId;
-        favoriButonunuGuncelle(buton, buton.dataset.urunId);
-    });
-    filtreleVeSirala();
-};
-
 window.favorileriGoster = function () {
     if (!aktifKullaniciId) return;
     seciliKategori = 'hepsi';
@@ -640,9 +644,9 @@ window.favorileriGoster = function () {
     document.querySelectorAll('.kategoriler button').forEach(function (b) {
         b.classList.remove('aktif');
     });
-    if (!favoriler.length) kucukBildirimGoster('Henüz favori ürün seçmediniz');
     filtreleVeSirala();
-    document.getElementById('urunler')?.scrollIntoView({behavior:'smooth'});
+    document.getElementById('urunler').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!favoriler.length) kucukBildirimGoster('Henüz favori ürün seçmediniz');
 };
 
 urunArama.addEventListener('input', filtreleVeSirala);
@@ -691,18 +695,18 @@ sepetGoster();
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const uyeBaglanti = document.getElementById("uyeBaglanti");
+    const cikisBtn = document.getElementById("cikisBtn");
     const profilMenu = document.getElementById("profilMenu");
     const profilAd = document.getElementById("profilAd");
-    const cikisBtn = document.getElementById("cikisBtn");
 
     onAuthStateChanged(auth, function (user) {
         if (user) {
             const ad = user.displayName || user.email.split("@")[0];
             uyeBaglanti.hidden = true;
-            profilAd.textContent = ad;
             profilMenu.hidden = false;
+            profilAd.textContent = "Hoş geldiniz, " + ad;
             window.favorileriEtkinlestir(user.uid);
-            if (new URLSearchParams(location.search).get("gorunum") === "favoriler") {
+            if (new URLSearchParams(location.search).get('gorunum') === 'favoriler') {
                 window.favorileriGoster();
             }
         } else {
@@ -720,6 +724,6 @@ sepetGoster();
         location.href = "index.html";
     });
   </script>
-	<script type="module" src="urun-puanlari.js?v=2"></script>
+	<script type="module" src="urun-puanlari.js?v=1"></script>
 	 </body>
 </html>

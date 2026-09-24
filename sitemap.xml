@@ -20,6 +20,21 @@
     <loc>https://elaystore.github.io/urun.html</loc>
     <priority>0.7</priority>
   </url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=mouse</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo01</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo02</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo03</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo04</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo05</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo06</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo07</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo08</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo09</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo10</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo11</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo12</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo13</loc><priority>0.8</priority></url>
+  <url><loc>https://elaystore.github.io/urun.html?urun=tablo14</loc><priority>0.8</priority></url>
   <url>
     <loc>https://elaystore.github.io/guvenli-alisveris.html</loc>
     <priority>0.8</priority>
