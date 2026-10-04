@@ -159,13 +159,15 @@
       tablo05:{ad:'Geometrik Altın Filografi Tablosu',fiyat:12500,resim:'tablo-05.png'},
       tablo06:{ad:'Allah Lafzı Filografi Tablosu',fiyat:4500,resim:'tablo-06.png'},
       tablo07:{ad:'Bereket Duası Filografi Tablosu',fiyat:9500,resim:'tablo-07.png'},
-      tablo08:{ad:'Yuvarlak Ahşap Filografi Tablosu',fiyat:11500,resim:'tablo-08.png'},
+      tablo08:{ad:'Yuvarlak Ahşap Filografi Tablosu',fiyat:11500,resim:'tablo-08.png',olcu:'Çap: 70 cm'},
       tablo09:{ad:'Vav Filografi Tablosu',fiyat:3500,resim:'tablo-09.png'},
       tablo10:{ad:'Gümüş Zemin Hat Filografi Tablosu',fiyat:8500,resim:'tablo-10.png'},
-      tablo11:{ad:'İstanbul Silüeti Filografi Tablosu',fiyat:8500,resim:'istanbul-silueti-01.webp'},
-      tablo12:{ad:'Galata Kulesi Filografi Tablosu',fiyat:7500,resim:'galata-lale-01.webp'},
-      tablo13:{ad:'Renkli Besmele Filografi Tablosu',fiyat:7600,resim:'besmele-renkli-01.webp'},
-      tablo14:{ad:'Türk Bayrağı Filografi Tablosu',fiyat:6500,resim:'turk-bayragi-01.webp'}
+      tablo11:{ad:'İstanbul Silüeti Filografi Tablosu',fiyat:8500,resim:'istanbul-silueti-01.webp',olcu:'Çap: 50 cm'},
+      tablo12:{ad:'Galata Kulesi Filografi Tablosu',fiyat:7500,resim:'galata-lale-01.webp',olcu:'Çap: 50 cm'},
+      tablo13:{ad:'Renkli Besmele Filografi Tablosu',fiyat:7600,resim:'besmele-renkli-01.webp',olcu:'Ölçü (çerçeve dâhil): 83 × 58 cm'},
+      tablo14:{ad:'Türk Bayrağı Filografi Tablosu',fiyat:6500,resim:'turk-bayragi-01.webp',olcu:'Ölçü (çerçeve dâhil): 84 × 60 cm'},
+      tablo15:{ad:'Atatürk Portresi Filografi Tablosu',fiyat:3500,resim:'ataturk-filografi-01.webp',olcu:'Ölçü (çerçeve dâhil): 49 × 33 cm'},
+      tablo16:{ad:'Nazar Boncuğu Filografi Tablosu',fiyat:2500,resim:'nazar-boncugu-filografi-01.webp',olcu:'Ölçü (çerçeve dâhil): 35 × 26 cm'}
     };
     const galeriDosyalari={
       mouse:['resim.jpg','bileklik-detay.webp','bileklik-ortam.webp'],
@@ -182,7 +184,9 @@
       tablo11:['istanbul-silueti-01.webp','istanbul-silueti-02.webp','istanbul-silueti-03.webp','istanbul-silueti-04.webp'],
       tablo12:['galata-lale-01.webp','galata-lale-02.webp','galata-lale-03.webp'],
       tablo13:['besmele-renkli-01.webp'],
-      tablo14:['turk-bayragi-01.webp','turk-bayragi-02.webp','turk-bayragi-03.webp','turk-bayragi-04.webp']
+      tablo14:['turk-bayragi-01.webp','turk-bayragi-02.webp','turk-bayragi-03.webp','turk-bayragi-04.webp'],
+      tablo15:['ataturk-filografi-01.webp'],
+      tablo16:['nazar-boncugu-filografi-01.webp']
     };
     const istenenId=new URLSearchParams(location.search).get('urun')||'mouse';
     const id=Object.prototype.hasOwnProperty.call(urunler,istenenId)?istenenId:'mouse';
@@ -190,6 +194,7 @@
     if(!p.puan)p.puan='☆ Henüz değerlendirme yok';
     if(!p.stok)p.stok='● Stokta Var';
     if(!p.oz)p.oz=[...ortakOzellikler];
+    if(p.olcu)p.oz.unshift(p.olcu);
     if(id.startsWith('tablo'))p.oz.push(tabloHazirlanma);
     const para=(deger)=>deger.toLocaleString('tr-TR')+' TL';
     const urunUrl='https://elaystore.github.io/urun.html?urun='+encodeURIComponent(id);

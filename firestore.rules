@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /reviews/{reviewId} {
+      function isAdmin() {
+        return request.auth != null
+          && request.auth.token.email in [
+            "sevdatyby@gmail.com",
+            "erdoganbyagiz@gmail.com"
+          ];
+      }
+
+      function validReview() {
+        return request.auth != null
+          && reviewId == request.resource.data.productId + "_" + request.auth.uid
+          && request.resource.data.keys().hasOnly([
+            "productId", "productName", "userId", "userName",
+            "rating", "text", "createdAt"
+          ])
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.productId in [
+            "mouse", "tablo01", "tablo02", "tablo03", "tablo04",
+            "tablo05", "tablo06", "tablo07", "tablo08", "tablo09", "tablo10",
+            "tablo11", "tablo12", "tablo13", "tablo14", "tablo15", "tablo16"
+          ]
+          && request.resource.data.productName is string
+          && request.resource.data.productName.size() > 0
+          && request.resource.data.productName.size() <= 100
+          && request.resource.data.userName is string
+          && request.resource.data.userName.size() > 0
+          && request.resource.data.userName.size() <= 80
+          && request.resource.data.rating is int
+          && request.resource.data.rating >= 1
+          && request.resource.data.rating <= 5
+          && request.resource.data.text is string
+          && request.resource.data.text.size() >= 3
+          && request.resource.data.text.size() <= 500
+          && request.resource.data.createdAt == request.time;
+      }
+
+      allow read: if true;
+
+      allow create: if validReview();
+
+      allow update: if validReview()
+        && resource.data.userId == request.auth.uid;
+
+      allow delete: if request.auth != null
+        && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+  }
+}
