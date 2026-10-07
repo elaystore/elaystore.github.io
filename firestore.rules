@@ -22,7 +22,8 @@ service cloud.firestore {
           && request.resource.data.productId in [
             "mouse", "tablo01", "tablo02", "tablo03", "tablo04",
             "tablo05", "tablo06", "tablo07", "tablo08", "tablo09", "tablo10",
-            "tablo11", "tablo12", "tablo13", "tablo14", "tablo15", "tablo16"
+            "tablo11", "tablo12", "tablo13", "tablo14", "tablo15", "tablo16",
+            "tablo17"
           ]
           && request.resource.data.productName is string
           && request.resource.data.productName.size() > 0
