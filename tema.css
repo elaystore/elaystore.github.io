@@ -1301,17 +1301,19 @@ header nav .profil-acilir a:hover {
 }
 
 .urun > .favori-btn {
-    position: absolute;
-    top: 24px;
-    right: 24px;
+    position: absolute !important;
+    top: 24px !important;
+    right: 24px !important;
     z-index: 3;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
-    margin: 0;
-    padding: 0;
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    margin: 0 !important;
+    padding: 0 !important;
     border: 1px solid rgba(255, 255, 255, .88);
     border-radius: 50%;
     color: #9f1020;
@@ -1664,7 +1666,7 @@ nav,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 0;
+    border-bottom: 0 !important;
 }
 
 .urun-detay-body > header nav a {
