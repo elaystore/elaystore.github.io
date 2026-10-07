@@ -773,6 +773,7 @@ header nav {
     align-items: center;
     justify-content: flex-end;
     gap: 2px;
+    position: relative;
 }
 
 header nav a,
@@ -780,6 +781,100 @@ header nav button {
     margin-left: 3px !important;
     font-size: 15px;
     white-space: nowrap;
+}
+
+.profil-menu {
+    position: relative;
+    flex: 0 0 auto;
+    margin-left: 3px;
+}
+
+.profil-menu > summary {
+    display: flex;
+    align-items: center;
+    min-height: 41px;
+    padding: 8px 13px;
+    border: 1px solid rgba(255, 255, 255, .38);
+    border-radius: 9px;
+    color: #fff;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+.profil-menu > summary::-webkit-details-marker {
+    display: none;
+}
+
+.profil-menu > summary:hover,
+.profil-menu[open] > summary {
+    border-color: var(--elay-pembe);
+    background: rgba(216, 31, 42, .72);
+}
+
+.profil-acilir {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    z-index: 1300;
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    padding: 12px;
+    border: 1px solid #e7ded8;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 18px 42px rgba(31, 26, 26, .22);
+}
+
+.profil-acilir::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    right: 24px;
+    width: 13px;
+    height: 13px;
+    border-top: 1px solid #e7ded8;
+    border-left: 1px solid #e7ded8;
+    background: #fff;
+    transform: rotate(45deg);
+}
+
+.profil-acilir strong {
+    padding: 7px 10px 12px;
+    border-bottom: 1px solid #eee5df;
+    color: #6e6662;
+    font-size: 14px;
+}
+
+header nav .profil-acilir a {
+    margin: 3px 0 0 !important;
+    padding: 10px 11px;
+    color: #2c2929 !important;
+    text-align: left;
+    text-decoration: none;
+}
+
+header nav .profil-acilir a:hover {
+    color: var(--elay-kirmizi-koyu) !important;
+    background: #f8efeb;
+}
+
+.profil-acilir #cikisBtn {
+    width: 100%;
+    margin: 4px 0 0 !important;
+    padding: 10px 11px !important;
+    border: 0 !important;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--elay-kirmizi-koyu);
+    text-align: left;
+}
+
+.profil-acilir #cikisBtn:hover {
+    background: #f8efeb;
 }
 
 .container {
