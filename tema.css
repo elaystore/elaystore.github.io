@@ -829,6 +829,14 @@ header nav button {
     box-shadow: 0 18px 42px rgba(31, 26, 26, .22);
 }
 
+.profil-menu:not([open]) > .profil-acilir {
+    display: none;
+}
+
+.profil-menu[open] > .profil-acilir {
+    display: flex;
+}
+
 .profil-acilir::before {
     content: "";
     position: absolute;
