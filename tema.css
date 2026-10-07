@@ -661,7 +661,7 @@ footer {
         padding: 30px 23px;
         background:
             linear-gradient(90deg, rgba(244,241,237,.97) 0%, rgba(244,241,237,.9) 64%, rgba(244,241,237,.38) 100%),
-            url("tablo-01.png") 68% 42% / cover no-repeat;
+            url("anka-hero.webp") right center / cover no-repeat;
     }
 
     .giris-vitrin h2 {
@@ -799,7 +799,7 @@ header nav button {
     border-radius: 22px 22px 0 0;
     background:
         linear-gradient(90deg, rgba(251,250,248,.99) 0%, rgba(251,250,248,.98) 41%, rgba(251,250,248,.78) 56%, rgba(251,250,248,.08) 82%),
-        url("tablo-01.png") 82% 43% / 56% auto no-repeat,
+        url("anka-hero.webp") right center / cover no-repeat,
         #ebe7e1 !important;
     box-shadow: 0 14px 42px rgba(45, 38, 38, .10);
 }
@@ -1323,7 +1323,7 @@ header nav button {
         padding: 46px 34px;
         background:
             linear-gradient(90deg, rgba(251,250,248,.98) 0%, rgba(251,250,248,.94) 58%, rgba(251,250,248,.34) 100%),
-            url("tablo-01.png") 86% 45% / auto 100% no-repeat,
+            url("anka-hero.webp") right center / cover no-repeat,
             #ebe7e1 !important;
     }
 
@@ -1385,7 +1385,7 @@ header nav button {
         border-radius: 17px 17px 0 0;
         background:
             linear-gradient(180deg, rgba(251,250,248,.99) 0%, rgba(251,250,248,.97) 54%, rgba(251,250,248,.28) 77%, rgba(251,250,248,.08) 100%),
-            url("tablo-01.png") center bottom / 100% auto no-repeat,
+            url("anka-hero.webp") 78% center / auto 100% no-repeat,
             #ebe7e1 !important;
     }
 
