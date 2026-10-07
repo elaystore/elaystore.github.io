@@ -305,8 +305,8 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="tema.css?v=27">
-    <script src="analitik.js?v=3" defer></script>
+    <link rel="stylesheet" href="tema.css?v=28">
+    <script src="analitik.js?v=1" defer></script>
 </head>
 
 <body>
@@ -323,14 +323,10 @@
                 <summary>👤 Profilim</summary>
                 <div class="profil-acilir">
                     <strong id="profilAd"></strong>
-        <a href="profil.html">👤 Profilim</a>
-        <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
-        <span class="profil-ayirici" aria-hidden="true"></span>
-        <a href="sss.html">? Sık Sorulan Sorular</a>
-        <a href="hakkimizda.html">ⓘ Hakkımızda</a>
-        <a href="iletisim.html">✉ İletişim</a>
-        <span class="profil-ayirici" aria-hidden="true"></span>
-        <button id="cikisBtn" type="button">Çıkış Yap</button>
+                    <a href="hakkimizda.html">Hakkımızda</a>
+                    <a href="iletisim.html">İletişim</a>
+                    <a href="index.html?gorunum=favoriler#urunler">♡ Favorilerim</a>
+                    <button id="cikisBtn" type="button">Çıkış Yap</button>
                 </div>
             </details>
             <a href="sepet.html">🛒 Sepet (<span id="sepetSayi">0</span>)</a>
@@ -605,16 +601,16 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const uyeBaglanti = document.getElementById("uyeBaglanti");
+        const cikisBtn = document.getElementById("cikisBtn");
         const profilMenu = document.getElementById("profilMenu");
         const profilAd = document.getElementById("profilAd");
-        const cikisBtn = document.getElementById("cikisBtn");
 
         onAuthStateChanged(auth, function (user) {
             if (user) {
                 const ad = user.displayName || user.email.split("@")[0];
                 uyeBaglanti.hidden = true;
-                profilAd.textContent = ad;
                 profilMenu.hidden = false;
+                profilAd.textContent = "Hoş geldiniz, " + ad;
             } else {
                 uyeBaglanti.hidden = false;
                 uyeBaglanti.textContent = "👤 Üye Ol / Giriş Yap";
@@ -629,17 +625,5 @@
             location.href = "index.html";
         });
     </script>
-  <footer class="ana-footer">
-    <div>
-      <img src="elay-logo.jpeg?v=3" alt="Elay Filografi">
-      <p>Geleneksel filografi sanatını özenle geleceğe taşıyoruz.</p>
-    </div>
-    <nav aria-label="Alt menü">
-      <a href="sss.html">Sık Sorulan Sorular</a>
-      <a href="hakkimizda.html">Hakkımızda</a>
-      <a href="iletisim.html">İletişim</a>
-      <a href="kisiye-ozel.html">Kişiye Özel Sipariş</a>
-    </nav>
-  </footer>
 </body>
 </html>
