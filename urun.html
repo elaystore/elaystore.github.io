@@ -13,11 +13,18 @@
   <meta id="ogDescription" property="og:description" content="Elay Store el emeği filografi ürün detayları.">
   <meta id="ogUrl" property="og:url" content="https://elaystore.github.io/urun.html">
   <meta id="ogImage" property="og:image" content="https://elaystore.github.io/elay-logo.jpeg">
-  <link rel="stylesheet" href="tema.css?v=30">
+  <link rel="stylesheet" href="tema.css?v=31">
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    function urunSayfasiniYukariAl() {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('DOMContentLoaded', urunSayfasiniYukariAl);
+    window.addEventListener('load', urunSayfasiniYukariAl);
     window.addEventListener('pageshow', function () {
-      window.requestAnimationFrame(function () { window.scrollTo(0, 0); });
+      window.requestAnimationFrame(urunSayfasiniYukariAl);
     });
   </script>
   <script src="analitik.js?v=1" defer></script>
