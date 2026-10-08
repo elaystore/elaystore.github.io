@@ -1666,6 +1666,8 @@ nav,
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative !important;
+    top: auto !important;
     border-bottom: 0 !important;
 }
 
@@ -1969,6 +1971,10 @@ body.galeri-acik {
 .yeni-detay .detay-aksiyonlar .detay-favori.aktif {
     color: #fff;
     background: #9f1020;
+}
+
+.yeni-detay .detay-aksiyonlar .detay-favori[hidden] {
+    display: none !important;
 }
 
 .yeni-detay .detay-aksiyonlar .detay-whatsapp {
