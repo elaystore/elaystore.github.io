@@ -22,7 +22,7 @@ header {
     min-height: 86px;
     padding: 10px 6% !important;
     background: var(--elay-siyah) !important;
-    border-bottom: 3px solid var(--elay-kirmizi);
+    border-bottom: 0 !important;
     box-shadow: 0 5px 20px rgba(0, 0, 0, .16);
 }
 
@@ -757,7 +757,7 @@ header {
     z-index: 1000;
     min-height: 78px;
     padding: 8px max(5%, 24px) !important;
-    border-bottom: 2px solid rgba(216, 31, 42, .8);
+    border-bottom: 0 !important;
     background: rgba(28, 28, 29, .98) !important;
     box-shadow: 0 6px 24px rgba(0, 0, 0, .12);
 }
