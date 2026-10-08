@@ -1662,6 +1662,17 @@ nav,
 }
 
 /* Ürün detay sayfası */
+.urun-detay-body {
+    margin: 0;
+    padding: 0;
+}
+
+.urun-detay-body *,
+.urun-detay-body *::before,
+.urun-detay-body *::after {
+    box-sizing: border-box;
+}
+
 .urun-detay-body > header {
     display: flex;
     align-items: center;
@@ -1669,6 +1680,7 @@ nav,
     position: relative !important;
     top: auto !important;
     border-bottom: 0 !important;
+    width: 100%;
 }
 
 .urun-detay-body > header nav a {
@@ -1683,7 +1695,7 @@ nav,
 
 .urun-detay-sayfasi {
     width: min(1240px, calc(100% - 40px));
-    margin: 0 auto;
+    margin: 0 auto !important;
     padding: 28px 0 0;
 }
 
