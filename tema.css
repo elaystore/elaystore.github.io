@@ -762,6 +762,10 @@ header {
     box-shadow: 0 6px 24px rgba(0, 0, 0, .12);
 }
 
+.ana-sayfa-body > header {
+    border-bottom: 0 !important;
+}
+
 .site-logo {
     width: 190px;
     height: 60px;
